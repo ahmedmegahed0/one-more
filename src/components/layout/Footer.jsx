@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Phone, MessageCircle } from 'lucide-react';
+import { MapPin, Phone, MessageCircle, User, LogOut } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 
 export const Footer = ({ settings }) => {
+  const { isAuthenticated, role, logout } = useAuth();
   return (
     <footer className="bg-brand-black text-white pt-16 pb-8 border-t-[6px] border-primary">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -46,8 +48,27 @@ export const Footer = ({ settings }) => {
           </div>
         </div>
         
-        <div className="border-t border-neutral-800 pt-8 text-center text-neutral-500 text-sm font-medium">
+        <div className="border-t border-neutral-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-neutral-500 text-sm font-medium">
           <p>Copyright &copy; {new Date().getFullYear()} ONE MORE. All rights reserved.</p>
+          <div>
+            {isAuthenticated ? (
+              <div className="flex items-center gap-4">
+                <Link to={role === 'Admin' ? '/admin' : '/staff'} className="flex items-center gap-2 hover:text-primary transition-colors">
+                  <User size={16} />
+                  <span>Dashboard</span>
+                </Link>
+                <button onClick={logout} className="flex items-center gap-2 hover:text-semantic-danger transition-colors">
+                  <LogOut size={16} />
+                  <span>Logout</span>
+                </button>
+              </div>
+            ) : (
+              <Link to="/admin/login" className="flex items-center gap-2 hover:text-primary transition-colors" title="Admin / Staff Login">
+                <User size={16} />
+                <span>Admin Login</span>
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     </footer>

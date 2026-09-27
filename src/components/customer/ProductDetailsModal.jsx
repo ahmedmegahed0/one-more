@@ -35,7 +35,7 @@ export const ProductDetailsModal = ({ isOpen, onClose, product, onAddToCart }) =
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm sm:p-4">
-      <div className="bg-brand-lightBg w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden animate-in slide-in-from-bottom-10 sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-300">
+      <div className="bg-brand-lightBg w-full sm:max-w-lg max-h-[90vh] flex flex-col rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden animate-in slide-in-from-bottom-10 sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-300">
         
         {/* Close Button Floating */}
         <button 
@@ -46,7 +46,7 @@ export const ProductDetailsModal = ({ isOpen, onClose, product, onAddToCart }) =
         </button>
 
         {/* Product Image */}
-        <div className="w-full aspect-[4/3] bg-neutral-200 relative">
+        <div className="w-full h-48 sm:h-64 bg-neutral-200 relative shrink-0">
           <img 
             src={product.image || logoImg} 
             alt={product.name} 
@@ -56,7 +56,7 @@ export const ProductDetailsModal = ({ isOpen, onClose, product, onAddToCart }) =
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
         </div>
 
-        <div className="p-6 max-h-[60vh] overflow-y-auto">
+        <div className="p-5 sm:p-6 flex-grow overflow-y-auto">
           {/* Title & Desc */}
           <div className="mb-6">
             <h2 className="text-2xl font-black text-brand-black tracking-tight leading-tight mb-2">{product.name}</h2>
@@ -109,7 +109,7 @@ export const ProductDetailsModal = ({ isOpen, onClose, product, onAddToCart }) =
         </div>
 
         {/* Footer Actions */}
-        <div className="p-6 border-t border-neutral-200 bg-white">
+        <div className="p-5 sm:p-6 border-t border-neutral-200 bg-white shrink-0 shadow-[0_-4px_20px_rgb(0,0,0,0.05)]">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-4 bg-neutral-100 rounded-xl p-1 border border-neutral-200">
               <button 

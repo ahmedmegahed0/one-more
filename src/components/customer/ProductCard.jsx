@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Plus } from 'lucide-react';
 import logoImg from '../../assets/logo.jpeg';
 
-export const ProductCard = ({ product }) => {
+export const ProductCard = ({ product, onAddClick }) => {
   const minPrice = product.variants?.length 
     ? Math.min(...product.variants.map(v => v.price))
     : 0;
@@ -21,7 +21,7 @@ export const ProductCard = ({ product }) => {
         ) : (
           <img src={logoImg} alt={product.name} className="w-full h-full object-cover opacity-80" />
         )}
-        {!product.isActive && (
+        {!product.isAvailable && (
           <div className="absolute inset-0 bg-brand-white/60 backdrop-blur-[2px] flex items-center justify-center z-10">
             <span className="bg-brand-black text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg">
               Sold Out
@@ -42,17 +42,22 @@ export const ProductCard = ({ product }) => {
             <span className="text-2xl font-black text-primary leading-none">{minPrice} <span className="text-sm font-bold">EGP</span></span>
           </div>
           
-          <Link 
-            to={`/menu?product=${product.id}`}
+          <button 
+            onClick={(e) => {
+              if (!product.isAvailable) {
+                e.preventDefault();
+                return;
+              }
+              if (onAddClick) onAddClick(product);
+            }}
             className={`w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-sm ${
-              product.isActive 
+              product.isAvailable 
                 ? 'bg-brand-black text-white hover:bg-primary hover:scale-110 hover:shadow-primary/30' 
                 : 'bg-neutral-200 text-neutral-400 cursor-not-allowed'
             }`}
-            onClick={(e) => !product.isActive && e.preventDefault()}
           >
             <Plus size={22} />
-          </Link>
+          </button>
         </div>
       </div>
     </div>

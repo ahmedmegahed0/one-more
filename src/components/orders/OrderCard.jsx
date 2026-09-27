@@ -2,21 +2,58 @@ import { useState } from 'react';
 import { OrderStatusBadge } from './OrderStatusBadge';
 import { Phone, MapPin, Tag, MessageSquare, PackageOpen, Play, Truck, Ban, MessageCircle, Receipt, CheckCircle2 } from 'lucide-react';
 import { ordersApi } from '../../api/orders.api';
+import { deliveriesApi } from '../../api/deliveries.api';
 
 export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions, onOpenInvoice }) => {
   const [waSent, setWaSent] = useState(order.whatsAppSent || false);
   const [waLoading, setWaLoading] = useState(false);
 
   const handleWaSent = async () => {
-    if (waSent) return;
-    setWaLoading(true);
-    try {
-      await ordersApi.markWhatsAppSent(order.id);
-      setWaSent(true);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setWaLoading(false);
+    let phone = order.customerPhoneNumber || '';
+    if (phone.startsWith('01')) {
+      phone = '2' + phone;
+    }
+    
+    let itemsText = order.items?.map(i => `- ${i.quantity}x ${i.productName || 'منتج'} (${i.variantName || 'عادي'}) بـ ${(i.totalPrice || (i.unitPrice * i.quantity) || 0).toFixed(2)} جنيه`).join('\n') || '';
+    
+    let subtotal = order.subtotal || order.items?.reduce((sum, item) => sum + (item.totalPrice || (item.unitPrice * item.quantity) || 0), 0) || 0;
+    let total = (order.total || order.finalAmount || 0).toFixed(2);
+    let subtotalFixed = subtotal.toFixed(2);
+    
+    let priceText = `إجمالي المنتجات: ${subtotalFixed} جنيه\nالإجمالي النهائي (شامل التوصيل): ${total} جنيه`;
+    
+    let message = `أهلاً بيك! استلمنا طلبك رقم #${order.invoiceNumber || order.id} من ONE MORE.\n\nتفاصيل الطلب:\n${itemsText}\n\n${priceText}\n\nطلبك قيد التجهيز وهنتواصل معاك قريب!`;
+    
+    if (order.status === 3 && order.deliveryId) {
+      try {
+        setWaLoading(true);
+        const res = await deliveriesApi.getDeliveries(1, 100);
+        const deliveries = res.data?.data?.data || res.data?.data || [];
+        const deliveryBoy = deliveries.find(d => d.id === order.deliveryId);
+        
+        if (deliveryBoy) {
+          message = `أهلاً بيك! طلبك رقم #${order.invoiceNumber || order.id} في الطريق ليك دلوقتي من ONE MORE.\n\nتفاصيل الطلب:\n${itemsText}\n\n${priceText}\n\nتقدر تتواصل مع مندوب التوصيل على رقم: ${deliveryBoy.phoneNumber} (الاسم: ${deliveryBoy.name}).\nبالهنا والشفا!`;
+        }
+      } catch (err) {
+        console.error("Could not fetch delivery details", err);
+      } finally {
+        setWaLoading(false);
+      }
+    }
+
+    const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    window.open(waUrl, '_blank');
+
+    if (!waSent) {
+      setWaLoading(true);
+      try {
+        await ordersApi.markWhatsAppSent(order.id);
+        setWaSent(true);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setWaLoading(false);
+      }
     }
   };
   const formatDate = (dateString) => {
@@ -42,7 +79,7 @@ export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions,
         <div className="text-right flex-shrink-0">
           <div className="text-sm font-bold text-neutral-500 uppercase tracking-wider mb-1">Total</div>
           <div className="text-2xl font-black text-primary leading-none">
-            {order.finalAmount?.toFixed(2)} <span className="text-sm">EGP</span>
+            {(order.total || order.finalAmount || 0).toFixed(2)} <span className="text-sm">EGP</span>
           </div>
         </div>
       </div>
@@ -85,7 +122,7 @@ export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions,
                 <li key={idx} className="flex justify-between text-sm">
                   <div>
                     <span className="font-black text-brand-black">{item.quantity}x</span>{' '}
-                    <span className="font-bold text-neutral-600">Variant {item.productVariantId}</span>
+                    <span className="font-bold text-neutral-600">{item.productName || 'Product'} ({item.variantName || 'Variant'})</span>
                     {item.comment && (
                       <p className="text-xs text-neutral-500 italic mt-1 ml-5">Note: {item.comment}</p>
                     )}
@@ -121,15 +158,15 @@ export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions,
 
           <button 
             onClick={handleWaSent}
-            disabled={waSent || waLoading}
+            disabled={waLoading}
             className={`px-4 py-2 rounded-xl font-bold transition-all flex items-center gap-2 shadow-sm border ${
               waSent 
-                ? 'bg-[#25D366]/10 text-[#25D366] border-[#25D366]/20 cursor-default' 
+                ? 'bg-[#25D366]/10 text-[#25D366] border-[#25D366]/20 hover:bg-[#25D366]/20' 
                 : 'bg-white text-[#25D366] border-neutral-200 hover:bg-[#25D366]/10 hover:border-[#25D366]/50'
             }`}
           >
             {waSent ? <CheckCircle2 size={16} /> : <MessageCircle size={16} />}
-            {waSent ? 'WhatsApp Sent' : waLoading ? 'Sending...' : 'Mark WA Sent'}
+            {waLoading ? 'Sending...' : waSent ? 'WhatsApp Sent (Resend)' : 'Send WhatsApp'}
           </button>
         </div>
 

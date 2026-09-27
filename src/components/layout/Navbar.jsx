@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingBag, Menu, X, Phone, User, LogOut } from 'lucide-react';
+import { ShoppingBag, Menu, X, Phone } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
-import { useAuth } from '../../context/AuthContext';
 
 export const Navbar = ({ settings }) => {
   const { cartCount } = useCart();
-  const { isAuthenticated, role, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
@@ -42,24 +40,6 @@ export const Navbar = ({ settings }) => {
                 </span>
               )}
             </Link>
-
-            <div className="w-px h-6 bg-neutral-200"></div>
-
-            {isAuthenticated ? (
-              <div className="flex items-center gap-3">
-                <Link to={role === 'Admin' ? '/admin' : '/staff'} className="flex items-center gap-2 text-brand-black hover:text-primary font-bold transition-colors">
-                  <User size={20} />
-                  <span className="text-sm">Dashboard</span>
-                </Link>
-                <button onClick={logout} className="p-2 text-neutral-400 hover:text-semantic-danger transition-colors" title="Logout">
-                  <LogOut size={20} />
-                </button>
-              </div>
-            ) : (
-              <Link to="/admin/login" className="p-2 text-neutral-400 hover:text-primary transition-colors" title="Admin / Staff Login">
-                <User size={24} />
-              </Link>
-            )}
           </div>
 
           <div className="md:hidden flex items-center gap-4">
@@ -84,22 +64,7 @@ export const Navbar = ({ settings }) => {
             <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="block font-bold text-xl text-brand-black">Home</Link>
             <Link to="/menu" onClick={() => setIsMobileMenuOpen(false)} className="block font-bold text-xl text-brand-black">Menu</Link>
             
-            <div className="border-t border-neutral-100 pt-4 mt-4 space-y-4">
-              {isAuthenticated ? (
-                <>
-                  <Link to={role === 'Admin' ? '/admin' : '/staff'} onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 font-bold text-lg text-brand-black">
-                    <User size={20} /> Dashboard
-                  </Link>
-                  <button onClick={() => { logout(); setIsMobileMenuOpen(false); }} className="flex items-center gap-3 font-bold text-lg text-semantic-danger">
-                    <LogOut size={20} /> Logout
-                  </button>
-                </>
-              ) : (
-                <Link to="/admin/login" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 font-bold text-lg text-brand-black">
-                  <User size={20} /> Staff Login
-                </Link>
-              )}
-            </div>
+
 
             {settings?.phoneNumber && (
               <a href={`tel:${settings.phoneNumber}`} className="flex items-center gap-3 text-primary font-bold py-2 mt-4 border-t border-neutral-100 pt-4">

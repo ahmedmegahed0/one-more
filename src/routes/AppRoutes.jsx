@@ -3,6 +3,8 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { CustomerLayout } from '../components/layout/CustomerLayout';
 import { AdminLayout } from '../components/layout/AdminLayout';
 import { Home } from '../pages/public/Home';
+import { Menu } from '../pages/public/Menu';
+import { Cart } from '../pages/public/Cart';
 import { AdminLogin } from '../pages/auth/AdminLogin';
 import { StaffLogin } from '../pages/auth/StaffLogin';
 import { ProtectedRoute } from './ProtectedRoute';
@@ -22,9 +24,8 @@ export const AppRoutes = () => {
       {/* Public Customer Routes */}
       <Route element={<CustomerLayout />}>
         <Route path="/" element={<Home />} />
-        {/* Placeholders for future phases */}
-        <Route path="/menu" element={<div className="p-20 text-center font-bold text-2xl">Menu Page Under Construction</div>} />
-        <Route path="/cart" element={<div className="p-20 text-center font-bold text-2xl">Cart Page Under Construction</div>} />
+        <Route path="/menu" element={<Menu />} />
+        <Route path="/cart" element={<Cart />} />
       </Route>
 
       {/* Auth Routes */}
