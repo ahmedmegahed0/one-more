@@ -56,6 +56,19 @@ export const OrdersManagement = () => {
     }
   };
 
+  // Auto-dismiss alert after 5 seconds
+  useEffect(() => {
+    let timeoutId;
+    if (newOrderAlert) {
+      timeoutId = setTimeout(() => {
+        setNewOrderAlert(false);
+      }, 5000);
+    }
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [newOrderAlert]);
+
   useEffect(() => {
     // Only poll if we are viewing 'today' orders
     if (dateMode !== 'today') return;
@@ -86,8 +99,8 @@ export const OrdersManagement = () => {
     // Initial check
     checkPendingOrders();
 
-    // Poll every 15 seconds
-    const interval = setInterval(checkPendingOrders, 15000);
+    // Poll every 1 minute (60000 ms)
+    const interval = setInterval(checkPendingOrders, 60000);
     return () => clearInterval(interval);
   }, [dateMode, activeTab]);
   // ------------------------------
