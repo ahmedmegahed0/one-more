@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { settingsApi } from '../../api/settings.api';
+import { adminApi } from '../../api/admin.api';
 import { Loader2, Settings as SettingsIcon, Image as ImageIcon, Save, Clock, Phone, MapPin, Store } from 'lucide-react';
 import logoImgFallback from '../../assets/logo.jpeg';
 
@@ -16,7 +17,8 @@ export const SettingsManagement = () => {
     address: '',
     restaurantOpen: true,
     openAt: '',
-    closeAt: ''
+    closeAt: '',
+    notificationEmail: ''
   });
   
   const [imageFile, setImageFile] = useState(null);
@@ -38,7 +40,8 @@ export const SettingsManagement = () => {
         address: data.address || '',
         restaurantOpen: data.restaurantOpen !== false,
         openAt: data.openAt || '',
-        closeAt: data.closeAt || ''
+        closeAt: data.closeAt || '',
+        notificationEmail: data.notificationEmail || ''
       });
       setImagePreview(data.logo || null);
     } catch (err) {
@@ -89,6 +92,26 @@ export const SettingsManagement = () => {
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to update settings.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleUpdateNotificationEmail = async () => {
+    setSaving(true);
+    setError('');
+    setSuccess('');
+    try {
+      if (formData.notificationEmail) {
+        await adminApi.setNotificationRecipient(formData.notificationEmail);
+        setSuccess('Notification email updated successfully!');
+      } else {
+        await adminApi.deleteNotificationRecipient();
+        setSuccess('Notification email removed successfully!');
+      }
+      setTimeout(() => setSuccess(''), 3000);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to update notification email.');
     } finally {
       setSaving(false);
     }
@@ -196,6 +219,35 @@ export const SettingsManagement = () => {
                   className="w-full pl-11 pr-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-brand-black font-medium"
                 />
               </div>
+            </div>
+          </div>
+
+          {/* Notifications */}
+          <div className="space-y-6 md:col-span-2 border-t border-neutral-100 pt-8">
+            <h3 className="font-black text-brand-black text-lg border-b border-neutral-100 pb-2 mb-4 flex items-center gap-2">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-neutral-400"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg> 
+              Order Notifications
+            </h3>
+            <div className="flex flex-col sm:flex-row gap-4 items-end">
+              <div className="flex-1 w-full">
+                <label className="block text-sm font-bold text-brand-black mb-2 uppercase tracking-wide">Notification Email</label>
+                <input
+                  type="email"
+                  value={formData.notificationEmail}
+                  onChange={(e) => setFormData({...formData, notificationEmail: e.target.value})}
+                  placeholder="Enter email to receive new order alerts"
+                  className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-brand-black font-medium"
+                />
+                <p className="text-xs text-neutral-500 mt-2 font-medium">Leave empty and click update to remove the notification recipient.</p>
+              </div>
+              <button
+                type="button"
+                onClick={handleUpdateNotificationEmail}
+                disabled={saving}
+                className="px-6 py-3 rounded-xl font-bold text-white bg-primary hover:bg-primary-dark transition-all shadow-sm disabled:opacity-50 h-[50px] shrink-0 mb-6 sm:mb-0"
+              >
+                {saving ? 'Updating...' : 'Update Email'}
+              </button>
             </div>
           </div>
 

@@ -17,6 +17,7 @@ import { OrdersManagement } from '../pages/admin/Orders';
 import { CustomerHistory } from '../pages/shared/CustomerHistory';
 import { ProductsManagement } from '../pages/admin/ProductsManagement';
 import { SettingsManagement } from '../pages/admin/SettingsManagement';
+import { StatisticsDashboard } from '../pages/admin/StatisticsDashboard';
 
 export const AppRoutes = () => {
   return (
@@ -44,6 +45,7 @@ export const AppRoutes = () => {
           <Route path="/admin/deliveries" element={<DeliveriesManagement />} />
           <Route path="/admin/delivery-areas" element={<DeliveryAreasManagement />} />
           <Route path="/admin/customer-history" element={<CustomerHistory />} />
+          <Route path="/admin/statistics" element={<StatisticsDashboard />} />
           <Route path="/admin/settings" element={<SettingsManagement />} />
         </Route>
       </Route>

@@ -20,7 +20,8 @@ export const Cart = () => {
     customerPhoneNumber: '',
     deliveryAreaId: '',
     address: '',
-    comment: ''
+    comment: '',
+    couponCode: ''
   });
 
   useEffect(() => {
@@ -65,6 +66,7 @@ export const Cart = () => {
       deliveryAreaId: parseInt(formData.deliveryAreaId),
       address: formData.address,
       comment: formData.comment || undefined,
+      couponCode: formData.couponCode ? formData.couponCode.trim() : null,
       items: cartItems.map(item => ({
         productVariantId: item.productVariantId,
         quantity: item.quantity,
@@ -84,7 +86,7 @@ export const Cart = () => {
     }
   };
 
-  if (cartItems.length === 0) {
+  if (cartItems.length === 0 && !showSuccess) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-4">
         <div className="w-24 h-24 bg-neutral-100 rounded-full flex items-center justify-center mb-6 text-neutral-300">
@@ -223,6 +225,18 @@ export const Cart = () => {
                   className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all font-medium resize-none"
                   placeholder="Street, Building, Floor, Apartment"
                   required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-neutral-600 mb-2">Coupon Code (Optional)</label>
+                <input 
+                  type="text" 
+                  name="couponCode"
+                  value={formData.couponCode}
+                  onChange={(e) => setFormData({ ...formData, couponCode: e.target.value.toUpperCase().replace(/\s/g, '') })}
+                  className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all font-medium uppercase tracking-widest placeholder:normal-case placeholder:tracking-normal"
+                  placeholder="Enter code here"
                 />
               </div>
 

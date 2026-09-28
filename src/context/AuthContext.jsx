@@ -1,9 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { authApi } from '../api/auth.api';
 
 const AuthContext = createContext(undefined);
 
 export const AuthProvider = ({ children }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [session, setSession] = useState({
     role: null,
     accessToken: null,
@@ -87,11 +90,11 @@ export const AuthProvider = ({ children }) => {
         isLoading: false,
       });
       
-      const path = window.location.pathname;
+      const path = location.pathname;
       if (path.startsWith('/admin')) {
-        window.location.href = '/admin/login';
+        navigate('/admin/login', { replace: true });
       } else {
-        window.location.href = '/staff/login';
+        navigate('/staff/login', { replace: true });
       }
     }
   };

@@ -142,33 +142,7 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* Popular Categories */}
-      <section className="py-24 bg-brand-white relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-end justify-between mb-12">
-            <div>
-              <h2 className="text-4xl font-black text-brand-black mb-2 tracking-tight">Crave It? We Have It.</h2>
-              <p className="text-neutral-500 font-medium text-lg">Explore our most popular categories</p>
-            </div>
-            <Link 
-              to="/menu"
-              className="hidden sm:flex items-center gap-2 text-primary font-bold hover:text-primary-dark transition-colors group"
-            >
-              Full Menu <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </div>
-          
-          <div className="flex overflow-x-auto pb-8 -mx-4 px-4 sm:mx-0 sm:px-0 hide-scrollbar gap-8">
-            {loadingCats ? (
-              Array.from({ length: 6 }).map((_, i) => <SkeletonCategory key={i} />)
-            ) : categories.length > 0 ? (
-              categories.map(cat => <CategoryCard key={cat.id} category={cat} />)
-            ) : (
-              <p className="text-neutral-500 font-medium italic">No categories available at the moment.</p>
-            )}
-          </div>
-        </div>
-      </section>
+
 
       {/* Our Menu Section */}
       <section id="menu-section" className="py-24 bg-brand-lightBg">

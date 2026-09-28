@@ -70,8 +70,9 @@ export const ProductDetailsModal = ({ isOpen, onClose, product, onAddToCart }) =
             <h3 className="text-sm font-black text-brand-black uppercase tracking-wider mb-3">Choose Size / Variant</h3>
             <div className="space-y-3">
               {product.variants?.filter(v => v.isAvailable).map((variant) => (
-                <label 
+                <div 
                   key={variant.id} 
+                  onClick={() => setSelectedVariant(variant)}
                   className={`flex items-center justify-between p-4 rounded-xl border-2 cursor-pointer transition-all ${
                     selectedVariant?.id === variant.id 
                       ? 'border-primary bg-primary/5' 
@@ -87,7 +88,7 @@ export const ProductDetailsModal = ({ isOpen, onClose, product, onAddToCart }) =
                     <span className="font-bold text-brand-black">{variant.name}</span>
                   </div>
                   <span className="font-black text-brand-black">{variant.price.toFixed(2)} <span className="text-xs text-neutral-500">EGP</span></span>
-                </label>
+                </div>
               ))}
               {product.variants?.filter(v => v.isAvailable).length === 0 && (
                 <div className="text-sm text-semantic-danger font-bold p-3 bg-semantic-danger/10 rounded-lg">No available options currently.</div>

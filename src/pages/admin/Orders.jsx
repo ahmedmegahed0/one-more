@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ordersApi } from '../../api/orders.api';
+import { adminApi } from '../../api/admin.api';
 import { OrderCard } from '../../components/orders/OrderCard';
 import { AssignDeliveryModal } from '../../components/orders/AssignDeliveryModal';
 import { CancelOrderModal } from '../../components/orders/CancelOrderModal';
@@ -20,7 +21,7 @@ export const OrdersManagement = () => {
   const [totalCount, setTotalCount] = useState(0);
 
   // Modals
-  const [prepareModal, setPrepareModal] = useState({ isOpen: false, orderId: null });
+  const [assignDeliveryModal, setAssignDeliveryModal] = useState({ isOpen: false, orderId: null });
   const [cancelModal, setCancelModal] = useState({ isOpen: false, orderId: null });
   const [invoiceModal, setInvoiceModal] = useState({ isOpen: false, orderId: null });
   const [isMutating, setIsMutating] = useState(false);
@@ -70,14 +71,27 @@ export const OrdersManagement = () => {
     setPageIndex(1);
   };
 
-  const handleOnWay = async (orderId) => {
-    if (!window.confirm('Mark this order as On Way?')) return;
+  const handlePrepare = async (orderId) => {
+    if (!window.confirm('Mark this order as Preparing?')) return;
     setIsMutating(true);
     try {
-      await ordersApi.moveOrderToOnWay(orderId);
+      await ordersApi.moveOrderToPrepare(orderId);
       fetchOrders();
     } catch (error) {
-      alert(error.response?.data?.message || 'Failed to dispatch order.');
+      alert(error.response?.data?.message || 'Failed to prepare order.');
+    } finally {
+      setIsMutating(false);
+    }
+  };
+
+  const handleDeleteOrder = async (orderId) => {
+    if (!window.confirm('Are you absolutely sure you want to DELETE this order? This action cannot be undone and will erase the order from the database.')) return;
+    setIsMutating(true);
+    try {
+      await adminApi.deleteOrder(orderId);
+      fetchOrders();
+    } catch (error) {
+      alert(error.response?.data?.message || 'Failed to delete order.');
     } finally {
       setIsMutating(false);
     }
@@ -169,11 +183,12 @@ export const OrdersManagement = () => {
             <OrderCard 
               key={order.id} 
               order={order} 
-              onPrepare={() => setPrepareModal({ isOpen: true, orderId: order.id })}
-              onOnWay={() => handleOnWay(order.id)}
+              onPrepare={() => handlePrepare(order.id)}
+              onOnWay={() => setAssignDeliveryModal({ isOpen: true, orderId: order.id })}
               onCancel={() => setCancelModal({ isOpen: true, orderId: order.id })}
               onOpenInvoice={(id) => setInvoiceModal({ isOpen: true, orderId: id })}
               disableActions={dateMode === 'history'}
+              onDelete={handleDeleteOrder}
             />
           ))
         )}
@@ -209,10 +224,10 @@ export const OrdersManagement = () => {
 
       {/* Modals */}
       <AssignDeliveryModal 
-        isOpen={prepareModal.isOpen} 
-        onClose={() => setPrepareModal({ isOpen: false, orderId: null })}
+        isOpen={assignDeliveryModal.isOpen} 
+        onClose={() => setAssignDeliveryModal({ isOpen: false, orderId: null })}
         onSuccess={fetchOrders}
-        orderId={prepareModal.orderId}
+        orderId={assignDeliveryModal.orderId}
       />
       <CancelOrderModal 
         isOpen={cancelModal.isOpen} 

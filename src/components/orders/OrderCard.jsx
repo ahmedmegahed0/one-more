@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { OrderStatusBadge } from './OrderStatusBadge';
-import { Phone, MapPin, Tag, MessageSquare, PackageOpen, Play, Truck, Ban, MessageCircle, Receipt, CheckCircle2 } from 'lucide-react';
+import { Phone, MapPin, Tag, MessageSquare, PackageOpen, Play, Truck, Ban, MessageCircle, Receipt, CheckCircle2, AlertTriangle, MoreVertical, Trash2 } from 'lucide-react';
 import { ordersApi } from '../../api/orders.api';
 import { deliveriesApi } from '../../api/deliveries.api';
 
-export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions, onOpenInvoice }) => {
+export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions, onOpenInvoice, onDelete }) => {
   const [waSent, setWaSent] = useState(order.whatsAppSent || false);
   const [waLoading, setWaLoading] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
 
   const handleWaSent = async () => {
     let phone = order.customerPhoneNumber || '';
@@ -14,15 +15,18 @@ export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions,
       phone = '2' + phone;
     }
     
-    let itemsText = order.items?.map(i => `- ${i.quantity}x ${i.productName || 'منتج'} (${i.variantName || 'عادي'}) بـ ${(i.totalPrice || (i.unitPrice * i.quantity) || 0).toFixed(2)} جنيه`).join('\n') || '';
+    const separator = '━━━━━━━━━━━━━━';
+    
+    let itemsText = order.items?.map(i => `🔸 ${i.quantity}x ${i.productName || 'منتج'} (${i.variantName || 'عادي'})\n   السعر: ${(i.totalPrice || (i.unitPrice * i.quantity) || 0).toFixed(2)} ج.م`).join('\n') || '';
     
     let subtotal = order.subtotal || order.items?.reduce((sum, item) => sum + (item.totalPrice || (item.unitPrice * item.quantity) || 0), 0) || 0;
     let total = (order.total || order.finalAmount || 0).toFixed(2);
     let subtotalFixed = subtotal.toFixed(2);
+    let deliveryFee = order.deliveryFee || (order.total - subtotal).toFixed(2);
     
-    let priceText = `إجمالي المنتجات: ${subtotalFixed} جنيه\nالإجمالي النهائي (شامل التوصيل): ${total} جنيه`;
+    let priceText = `إجمالي المنتجات: ${subtotalFixed} ج.م\nالتوصيل: ${deliveryFee} ج.م\nالإجمالي النهائي: *${total} ج.م*`;
     
-    let message = `أهلاً بيك! استلمنا طلبك رقم #${order.invoiceNumber || order.id} من ONE MORE.\n\nتفاصيل الطلب:\n${itemsText}\n\n${priceText}\n\nطلبك قيد التجهيز وهنتواصل معاك قريب!`;
+    let message = `أهلاً بيك في ONE MORE! 🍔\n${separator}\nاستلمنا طلبك رقم #${order.invoiceNumber || order.id} بنجاح.\n${separator}\n*تفاصيل الطلب:*\n${itemsText}\n${separator}\n*الحساب:*\n${priceText}\n${separator}\nطلبك دلوقتي قيد التجهيز ⏳ وهنتواصل معاك أول ما يخرج للتوصيل!`;
     
     if (order.status === 3 && order.deliveryId) {
       try {
@@ -32,7 +36,7 @@ export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions,
         const deliveryBoy = deliveries.find(d => d.id === order.deliveryId);
         
         if (deliveryBoy) {
-          message = `أهلاً بيك! طلبك رقم #${order.invoiceNumber || order.id} في الطريق ليك دلوقتي من ONE MORE.\n\nتفاصيل الطلب:\n${itemsText}\n\n${priceText}\n\nتقدر تتواصل مع مندوب التوصيل على رقم: ${deliveryBoy.phoneNumber} (الاسم: ${deliveryBoy.name}).\nبالهنا والشفا!`;
+          message = `أهلاً بيك في ONE MORE! 🍔\n${separator}\nطلبك رقم #${order.invoiceNumber || order.id} في الطريق ليك دلوقتي! 🛵\n${separator}\n*تفاصيل الطلب:*\n${itemsText}\n${separator}\n*الحساب:*\n${priceText}\n${separator}\n*بيانات المندوب:*\nالاسم: ${deliveryBoy.name}\nرقم الموبايل: ${deliveryBoy.phoneNumber}\n${separator}\nبالهنا والشفا! ❤️`;
         }
       } catch (err) {
         console.error("Could not fetch delivery details", err);
@@ -76,11 +80,41 @@ export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions,
             {formatDate(order.createdAt)}
           </span>
         </div>
-        <div className="text-right flex-shrink-0">
-          <div className="text-sm font-bold text-neutral-500 uppercase tracking-wider mb-1">Total</div>
-          <div className="text-2xl font-black text-primary leading-none">
-            {(order.total || order.finalAmount || 0).toFixed(2)} <span className="text-sm">EGP</span>
+        <div className="text-right flex-shrink-0 flex items-start gap-4">
+          <div>
+            <div className="text-sm font-bold text-neutral-500 uppercase tracking-wider mb-1">Total</div>
+            <div className="text-2xl font-black text-primary leading-none">
+              {(order.total || order.finalAmount || 0).toFixed(2)} <span className="text-sm">EGP</span>
+            </div>
           </div>
+          
+          {onDelete && (
+            <div className="relative">
+              <button 
+                onClick={() => setShowMenu(!showMenu)}
+                className="p-1.5 rounded-lg text-neutral-400 hover:text-brand-black hover:bg-neutral-200 transition-colors"
+              >
+                <MoreVertical size={20} />
+              </button>
+              
+              {showMenu && (
+                <>
+                  <div className="fixed inset-0 z-10" onClick={() => setShowMenu(false)}></div>
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-neutral-100 z-20 py-1 animate-in fade-in slide-in-from-top-2">
+                    <button
+                      onClick={() => {
+                        setShowMenu(false);
+                        onDelete(order.id);
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm font-bold text-semantic-danger hover:bg-semantic-danger/5 flex items-center gap-2"
+                    >
+                      <Trash2 size={16} /> Delete Order
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -156,18 +190,20 @@ export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions,
             <Receipt size={16} /> Invoice
           </button>
 
-          <button 
-            onClick={handleWaSent}
-            disabled={waLoading}
-            className={`px-4 py-2 rounded-xl font-bold transition-all flex items-center gap-2 shadow-sm border ${
-              waSent 
-                ? 'bg-[#25D366]/10 text-[#25D366] border-[#25D366]/20 hover:bg-[#25D366]/20' 
-                : 'bg-white text-[#25D366] border-neutral-200 hover:bg-[#25D366]/10 hover:border-[#25D366]/50'
-            }`}
-          >
-            {waSent ? <CheckCircle2 size={16} /> : <MessageCircle size={16} />}
-            {waLoading ? 'Sending...' : waSent ? 'WhatsApp Sent (Resend)' : 'Send WhatsApp'}
-          </button>
+          {order.status !== 1 && (
+            <button 
+              onClick={handleWaSent}
+              disabled={waLoading}
+              className={`px-4 py-2 rounded-xl font-bold transition-all flex items-center gap-2 shadow-sm border ${
+                waSent 
+                  ? 'bg-[#25D366]/10 text-[#25D366] border-[#25D366]/20 hover:bg-[#25D366]/20' 
+                  : 'bg-semantic-danger/10 text-semantic-danger border-semantic-danger/20 hover:bg-semantic-danger/20'
+              }`}
+            >
+              {waSent ? <CheckCircle2 size={16} /> : <AlertTriangle size={16} />}
+              {waLoading ? 'Sending...' : waSent ? 'WhatsApp Sent (Resend)' : 'Send WhatsApp (Not Sent)'}
+            </button>
+          )}
         </div>
 
         {!disableActions && [1, 2].includes(order.status) && (

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Outlet, NavLink, Link } from 'react-router-dom';
-import { Shield, LayoutGrid, Tag, LogOut, Users, Truck, MapPin, ClipboardList, History, PackageSearch, Settings, Menu, X } from 'lucide-react';
+import { Shield, LayoutGrid, Tag, LogOut, Users, Truck, MapPin, ClipboardList, History, PackageSearch, Settings, Menu, X, TrendingUp } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import logoImg from '../../assets/logo.jpeg';
 import { ApiStatusBadge } from '../admin/ApiStatusBadge';
@@ -10,6 +10,7 @@ export const AdminLayout = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
+    { name: 'Overview', path: '/admin/statistics', icon: TrendingUp },
     { name: 'Orders', path: '/admin/orders', icon: ClipboardList },
     { name: 'Staff Management', path: '/admin/staff', icon: Users },
     { name: 'Categories', path: '/admin/categories', icon: LayoutGrid },

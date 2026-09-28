@@ -20,6 +20,26 @@ export const Footer = ({ settings }) => {
               <Link to="/" className="block text-neutral-400 font-medium hover:text-primary transition-colors">Home</Link>
               <Link to="/menu" className="block text-neutral-400 font-medium hover:text-primary transition-colors">Menu</Link>
               <Link to="/cart" className="block text-neutral-400 font-medium hover:text-primary transition-colors">Cart</Link>
+              
+              {isAuthenticated ? (
+                <>
+                  <Link to={role === 'Admin' ? '/admin' : '/staff'} className="block text-neutral-400 font-medium hover:text-primary transition-colors">
+                    Dashboard
+                  </Link>
+                  <button onClick={logout} className="block w-full text-left text-neutral-400 font-medium hover:text-semantic-danger transition-colors">
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link to="/admin/login" className="block text-neutral-400 font-medium hover:text-primary transition-colors">
+                    Admin Login
+                  </Link>
+                  <Link to="/staff/login" className="block text-neutral-400 font-medium hover:text-primary transition-colors">
+                    Staff Login
+                  </Link>
+                </>
+              )}
             </div>
           </div>
 
@@ -48,27 +68,8 @@ export const Footer = ({ settings }) => {
           </div>
         </div>
         
-        <div className="border-t border-neutral-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-neutral-500 text-sm font-medium">
+        <div className="border-t border-neutral-800 pt-8 text-center text-neutral-500 text-sm font-medium">
           <p>Copyright &copy; {new Date().getFullYear()} ONE MORE. All rights reserved.</p>
-          <div>
-            {isAuthenticated ? (
-              <div className="flex items-center gap-4">
-                <Link to={role === 'Admin' ? '/admin' : '/staff'} className="flex items-center gap-2 hover:text-primary transition-colors">
-                  <User size={16} />
-                  <span>Dashboard</span>
-                </Link>
-                <button onClick={logout} className="flex items-center gap-2 hover:text-semantic-danger transition-colors">
-                  <LogOut size={16} />
-                  <span>Logout</span>
-                </button>
-              </div>
-            ) : (
-              <Link to="/admin/login" className="flex items-center gap-2 hover:text-primary transition-colors" title="Admin / Staff Login">
-                <User size={16} />
-                <span>Admin Login</span>
-              </Link>
-            )}
-          </div>
         </div>
       </div>
     </footer>

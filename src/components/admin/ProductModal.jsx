@@ -247,49 +247,68 @@ export const ProductModal = ({ isOpen, onClose, onSuccess, initialData = null })
             
             <div className="space-y-3 max-h-64 overflow-y-auto pr-2">
               {variants.map((v, idx) => (
-                <div key={idx} className="flex flex-wrap sm:flex-nowrap items-center gap-3 bg-white p-3 rounded-xl border border-neutral-200 shadow-sm relative">
-                  <input
-                    required
-                    type="text"
-                    placeholder="Name (e.g. Medium)"
-                    value={v.name}
-                    onChange={(e) => handleVariantChange(idx, 'name', e.target.value)}
-                    className="flex-1 min-w-[120px] px-3 py-2 bg-neutral-50 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm font-bold"
-                  />
-                  <input
-                    required
-                    type="number"
-                    step="0.01"
-                    placeholder="Price"
-                    value={v.price}
-                    onChange={(e) => handleVariantChange(idx, 'price', e.target.value)}
-                    className="w-24 px-3 py-2 bg-neutral-50 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm font-bold"
-                  />
-                  <input
-                    required
-                    type="number"
-                    placeholder="Order"
-                    value={v.displayOrder}
-                    onChange={(e) => handleVariantChange(idx, 'displayOrder', e.target.value)}
-                    className="w-20 px-3 py-2 bg-neutral-50 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm font-bold hidden sm:block"
-                  />
-                  <label className="flex items-center gap-1.5 cursor-pointer bg-neutral-50 px-2 py-2 rounded-lg border border-neutral-200">
+                <div key={idx} className="flex flex-wrap sm:flex-nowrap items-end gap-3 bg-white p-3 rounded-xl border border-neutral-200 shadow-sm relative">
+                  <div className="flex-1 min-w-[120px] flex flex-col gap-1.5">
+                    <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wide">Name</label>
                     <input
-                      type="checkbox"
-                      checked={v.isAvailable}
-                      onChange={(e) => handleVariantChange(idx, 'isAvailable', e.target.checked)}
-                      className="w-4 h-4 rounded text-primary focus:ring-primary border-neutral-300 bg-white"
+                      required
+                      type="text"
+                      placeholder="e.g. Medium"
+                      value={v.name}
+                      onChange={(e) => handleVariantChange(idx, 'name', e.target.value)}
+                      className="w-full px-3 py-2 bg-neutral-50 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm font-bold"
                     />
-                    <span className="text-xs font-bold uppercase">On</span>
-                  </label>
+                  </div>
+                  
+                  <div className="w-24 flex flex-col gap-1.5">
+                    <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wide">Price</label>
+                    <input
+                      required
+                      type="number"
+                      step="0.01"
+                      placeholder="0.00"
+                      value={v.price}
+                      onChange={(e) => handleVariantChange(idx, 'price', e.target.value)}
+                      className="w-full px-3 py-2 bg-neutral-50 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm font-bold"
+                    />
+                  </div>
+
+                  <div className="w-20 hidden sm:flex flex-col gap-1.5">
+                    <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wide">Order</label>
+                    <input
+                      required
+                      type="number"
+                      placeholder="1"
+                      value={v.displayOrder}
+                      onChange={(e) => handleVariantChange(idx, 'displayOrder', e.target.value)}
+                      className="w-full px-3 py-2 bg-neutral-50 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm font-bold"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] font-bold text-transparent uppercase tracking-wide hidden sm:block">Status</label>
+                    <label className="flex items-center justify-center gap-1.5 cursor-pointer bg-neutral-50 px-2 py-2 rounded-lg border border-neutral-200 h-[38px]">
+                      <input
+                        type="checkbox"
+                        checked={v.isAvailable}
+                        onChange={(e) => handleVariantChange(idx, 'isAvailable', e.target.checked)}
+                        className="w-4 h-4 rounded text-primary focus:ring-primary border-neutral-300 bg-white"
+                      />
+                      <span className="text-xs font-bold uppercase">On</span>
+                    </label>
+                  </div>
+
                   {variants.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => removeVariant(idx)}
-                      className="p-2 text-neutral-400 hover:text-semantic-danger hover:bg-semantic-danger/10 rounded-lg transition-colors"
-                    >
-                      <Trash2 size={16} />
-                    </button>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] font-bold text-transparent uppercase tracking-wide hidden sm:block">Del</label>
+                      <button
+                        type="button"
+                        onClick={() => removeVariant(idx)}
+                        className="p-2 text-neutral-400 hover:text-semantic-danger hover:bg-semantic-danger/10 rounded-lg transition-colors h-[38px] flex items-center justify-center"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
                   )}
                 </div>
               ))}

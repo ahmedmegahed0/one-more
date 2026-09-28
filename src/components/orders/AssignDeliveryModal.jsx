@@ -42,7 +42,7 @@ export const AssignDeliveryModal = ({ isOpen, onClose, onSuccess, orderId }) => 
     setError('');
 
     try {
-      await ordersApi.moveOrderToPrepare(orderId, selectedDeliveryId);
+      await ordersApi.moveOrderToOnWay(orderId, selectedDeliveryId);
       onSuccess();
       onClose();
     } catch (err) {
@@ -59,8 +59,8 @@ export const AssignDeliveryModal = ({ isOpen, onClose, onSuccess, orderId }) => 
       <div className="bg-brand-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200 border border-neutral-100">
         <div className="flex items-center justify-between p-6 border-b border-neutral-100 bg-neutral-50/50">
           <h2 className="text-xl font-black text-brand-black tracking-tight flex items-center gap-2">
-            <Truck size={20} className="text-[#61AFFE]" />
-            Assign Courier & Prepare
+            <Truck size={20} className="text-primary" />
+            Assign Courier & Dispatch
           </h2>
           <button onClick={onClose} className="text-neutral-400 hover:text-semantic-danger transition-colors bg-white p-1 rounded-lg border border-neutral-200">
             <X size={20} />
@@ -108,14 +108,14 @@ export const AssignDeliveryModal = ({ isOpen, onClose, onSuccess, orderId }) => 
             <button
               type="submit"
               disabled={loading || !selectedDeliveryId}
-              className="px-8 py-3 rounded-xl font-bold text-white bg-[#61AFFE] hover:bg-blue-600 transition-all flex items-center gap-2 disabled:opacity-50 shadow-[0_4px_14px_0_rgba(97,175,254,0.39)]"
+              className="px-8 py-3 rounded-xl font-bold text-white bg-primary hover:bg-primary-dark transition-all flex items-center gap-2 disabled:opacity-50 shadow-[0_4px_14px_0_rgba(255,106,0,0.39)]"
             >
               {loading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
                   Assigning...
                 </>
-              ) : 'Confirm & Prepare'}
+              ) : 'Confirm & Dispatch'}
             </button>
           </div>
         </form>

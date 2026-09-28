@@ -17,15 +17,17 @@ export const ordersApi = {
     return apiClient.post('/api/Orders', orderPayload);
   },
 
-  moveOrderToPrepare: async (id, deliveryId) => {
+  moveOrderToPrepare: async (id) => {
     return apiClient.post(`/api/Orders/${id}/to-prepare`, {
-      orderId: id,
-      deliveryId: parseInt(deliveryId)
+      orderId: id
     });
   },
 
-  moveOrderToOnWay: async (id) => {
-    return apiClient.post(`/api/Orders/${id}/to-on-way`);
+  moveOrderToOnWay: async (id, deliveryId) => {
+    return apiClient.post(`/api/Orders/${id}/to-on-way`, {
+      orderId: id,
+      deliveryId: parseInt(deliveryId)
+    });
   },
 
   cancelOrder: async (id, cancellationReason) => {
