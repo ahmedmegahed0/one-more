@@ -68,9 +68,9 @@ export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions,
   };
 
   return (
-    <div className="bg-brand-white rounded-2xl border border-neutral-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+    <div className="bg-brand-white rounded-2xl border border-neutral-200 shadow-sm hover:shadow-md transition-shadow">
       {/* Header */}
-      <div className="p-5 border-b border-neutral-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-neutral-50/50">
+      <div className="p-5 border-b border-neutral-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-neutral-50/50 rounded-t-2xl">
         <div>
           <div className="flex items-center gap-3 mb-1">
             <h3 className="font-black text-xl text-brand-black tracking-tight">#{order.invoiceNumber || order.id}</h3>
@@ -100,7 +100,7 @@ export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions,
               {showMenu && (
                 <>
                   <div className="fixed inset-0 z-10" onClick={() => setShowMenu(false)}></div>
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-neutral-100 z-20 py-1 animate-in fade-in slide-in-from-top-2">
+                  <div className="absolute top-full left-0 sm:right-0 sm:left-auto mt-2 w-48 bg-white rounded-xl shadow-lg border border-neutral-100 z-50 py-1 animate-in fade-in slide-in-from-top-2">
                     <button
                       onClick={() => {
                         setShowMenu(false);
@@ -172,7 +172,7 @@ export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions,
       </div>
 
       {/* Footer Actions */}
-      <div className="p-5 border-t border-neutral-100 bg-neutral-50/50 flex flex-wrap justify-end gap-3">
+      <div className="p-5 border-t border-neutral-100 bg-neutral-50/50 flex flex-wrap justify-end gap-3 rounded-b-2xl">
         <div className="flex items-center gap-3 mr-auto flex-wrap">
           {!disableActions && [1, 2, 3].includes(order.status) && (
             <button 

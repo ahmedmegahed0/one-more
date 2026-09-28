@@ -10,7 +10,7 @@ import { useAuth } from '../../context/AuthContext';
 import { Loader2, Calendar, ClipboardList, ChevronLeft, ChevronRight, Play, Trash2, Bell, X } from 'lucide-react';
 
 export const OrdersManagement = () => {
-  const { user } = useAuth();
+  const { role } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   
@@ -288,7 +288,7 @@ export const OrdersManagement = () => {
               onCancel={(orderObj) => setCancelModal({ isOpen: true, order: orderObj })}
               onOpenInvoice={(id) => setInvoiceModal({ isOpen: true, orderId: id })}
               disableActions={dateMode === 'history'}
-              onDelete={user?.role === 'Admin' ? () => setDeleteOrderModal({ isOpen: true, orderId: order.id }) : undefined}
+              onDelete={role === 'Admin' ? () => setDeleteOrderModal({ isOpen: true, orderId: order.id }) : undefined}
             />
           ))
         )}
