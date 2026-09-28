@@ -95,15 +95,15 @@ export const Home = () => {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-5">
-                <Link 
-                  to="/menu"
+                <button 
+                  onClick={() => document.getElementById('menu-section')?.scrollIntoView({ behavior: 'smooth' })}
                   className="px-8 py-4 rounded-xl bg-gradient-to-r from-primary to-[#ff8c3a] text-white font-black tracking-wide text-lg transition-all duration-300 shadow-[0_8px_25px_rgba(255,106,0,0.35)] hover:shadow-[0_12px_35px_rgba(255,106,0,0.5)] hover:-translate-y-1 flex items-center justify-center gap-3 group border border-primary/50 relative overflow-hidden"
                 >
                   {/* Button shine effect */}
                   <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-[shimmer_1.5s_infinite]"></div>
                   <span className="relative">اطلب دلوقتي</span>
-                  <ArrowRight size={22} className="relative group-hover:translate-x-1 transition-transform" />
-                </Link>
+                  <ArrowLeft size={22} className="relative group-hover:-translate-x-1 transition-transform" />
+                </button>
               </div>
             </div>
 
