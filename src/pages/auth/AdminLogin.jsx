@@ -32,7 +32,7 @@ export const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-brand-black p-4 relative">
+    <div className="min-h-[100dvh] flex items-center justify-center bg-brand-black p-4 relative">
       <Link 
         to="/" 
         className="absolute top-6 left-6 flex items-center gap-2 text-neutral-400 hover:text-white bg-brand-softBlack px-4 py-2 rounded-xl border border-neutral-800 transition-colors font-bold text-sm"

@@ -41,7 +41,7 @@ export const Menu = () => {
   }, []);
 
   return (
-    <div className="flex flex-col w-full min-h-screen bg-brand-lightBg pt-8 pb-24">
+    <div className="flex flex-col w-full min-h-[100dvh] bg-brand-lightBg pt-8 pb-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <h1 className="text-4xl sm:text-5xl font-black text-brand-black mb-4 tracking-tight">المنيو الكامل</h1>
@@ -61,6 +61,7 @@ export const Menu = () => {
                   <img 
                     src={cat.image || logoImg}
                     alt={cat.name}
+                    loading="lazy"
                     className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${!cat.image ? 'opacity-80 p-2' : ''}`}
                     onError={(e) => { e.target.src = logoImg; e.target.onerror = null; }}
                   />
@@ -91,21 +92,22 @@ export const Menu = () => {
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-              {loadingProds ? (
-                Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)
-              ) : products.filter(p => p.categoryId === selectedCategory).length > 0 ? (
-                products
-                  .filter(prod => prod.categoryId === selectedCategory)
-                  .map(prod => <ProductCard key={prod.id} product={prod} onAddClick={setSelectedProduct} />)
-              ) : (
-                <div className="col-span-full text-center py-16 text-neutral-500 font-medium bg-white rounded-3xl border border-neutral-100 shadow-sm flex flex-col items-center">
-                  <div className="w-16 h-16 bg-neutral-50 rounded-full flex items-center justify-center mb-4 text-neutral-300">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              {(() => {
+                if (loadingProds) return Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />);
+                const filteredProducts = products.filter(p => p.categoryId === selectedCategory);
+                if (filteredProducts.length > 0) {
+                  return filteredProducts.map(prod => <ProductCard key={prod.id} product={prod} onAddClick={setSelectedProduct} />);
+                }
+                return (
+                  <div className="col-span-full text-center py-16 text-neutral-500 font-medium bg-white rounded-3xl border border-neutral-100 shadow-sm flex flex-col items-center">
+                    <div className="w-16 h-16 bg-neutral-50 rounded-full flex items-center justify-center mb-4 text-neutral-300">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                    </div>
+                    <p className="text-lg text-brand-black font-bold mb-1">مفيش منتجات</p>
+                    <p className="text-sm">القسم ده لسه مفيهوش منتجات.</p>
                   </div>
-                  <p className="text-lg text-brand-black font-bold mb-1">مفيش منتجات</p>
-                  <p className="text-sm">القسم ده لسه مفيهوش منتجات.</p>
-                </div>
-              )}
+                );
+              })()}
             </div>
           </div>
         )}

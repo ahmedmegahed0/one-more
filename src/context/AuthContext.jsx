@@ -1,12 +1,11 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { authApi } from '../api/auth.api';
 
 const AuthContext = createContext(undefined);
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [session, setSession] = useState({
     role: null,
     accessToken: null,
@@ -33,7 +32,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = async (email, password, role) => {
+  const login = useCallback(async (email, password, role) => {
     setSession(prev => ({ ...prev, isLoading: true }));
     try {
       let res;
@@ -68,9 +67,9 @@ export const AuthProvider = ({ children }) => {
         error: error.response?.data?.message || error.response?.data?.title || 'Login failed. Please check your credentials.'
       };
     }
-  };
+  }, []);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     setSession(prev => ({ ...prev, isLoading: true }));
     try {
       if (session.accessToken) {
@@ -92,10 +91,16 @@ export const AuthProvider = ({ children }) => {
       
       navigate('/', { replace: true });
     }
-  };
+  }, [session.accessToken, navigate]);
+
+  const value = useMemo(() => ({
+    ...session,
+    login,
+    logout
+  }), [session, login, logout]);
 
   return (
-    <AuthContext.Provider value={{ ...session, login, logout }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

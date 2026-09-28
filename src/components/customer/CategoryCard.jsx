@@ -10,9 +10,9 @@ export const CategoryCard = ({ category }) => {
     >
       <div className="w-24 h-24 rounded-full bg-brand-white shadow-sm border border-neutral-100 overflow-hidden relative transition-all duration-300 group-hover:scale-105 group-hover:shadow-md group-hover:border-primary/50 flex items-center justify-center">
         {category.image ? (
-          <img src={category.image} alt={category.name} className="w-full h-full object-cover" onError={(e) => { e.target.src = logoImg; e.target.onerror = null; }} />
+          <img src={category.image} alt={category.name} loading="lazy" className="w-full h-full object-cover" onError={(e) => { e.target.src = logoImg; e.target.onerror = null; }} />
         ) : (
-          <img src={logoImg} alt={category.name} className="w-full h-full object-cover p-2 grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all" />
+          <img src={logoImg} alt={category.name} loading="lazy" className="w-full h-full object-cover p-2 grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all" />
         )}
       </div>
       <h3 className="font-bold text-brand-black group-hover:text-primary transition-colors line-clamp-2 leading-tight">

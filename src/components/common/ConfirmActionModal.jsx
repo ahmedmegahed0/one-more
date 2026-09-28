@@ -18,7 +18,7 @@ export const ConfirmActionModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80  p-4">
       <div className="bg-brand-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-300">
         <div className="p-8">
           <div style={{ backgroundColor: `color-mix(in srgb, currentColor 10%, transparent)` }} className={`mx-auto mb-6 flex items-center justify-center w-20 h-20 rounded-full ${colorClass.replace('text-', 'bg-').replace('text-brand-black', 'bg-neutral-100')} bg-opacity-10`}>

@@ -9,7 +9,7 @@ export const Navbar = ({ settings }) => {
 
   return (
     <div className="fixed top-0 left-0 w-full z-50 px-4 sm:px-6 lg:px-8 pt-6 pointer-events-none">
-      <header className="max-w-6xl mx-auto bg-white/85 backdrop-blur-xl border border-white/80 shadow-[0_8px_30px_rgba(0,0,0,0.08)] rounded-full pointer-events-auto transition-all duration-300">
+      <header className="max-w-6xl mx-auto bg-white/85  border border-white/80 shadow-[0_8px_30px_rgba(0,0,0,0.08)] rounded-full pointer-events-auto transition-all duration-300">
         <div className="flex justify-between items-center h-16 px-6 sm:px-8">
           
           {/* Logo */}
@@ -97,7 +97,7 @@ export const Navbar = ({ settings }) => {
 
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-28 left-4 right-4 bg-white/95 backdrop-blur-2xl border border-white shadow-2xl rounded-3xl animate-in slide-in-from-top-4 fade-in duration-200 pointer-events-auto overflow-hidden">
+        <div className="md:hidden absolute top-28 left-4 right-4 bg-white/95  border border-white shadow-2xl rounded-3xl animate-in slide-in-from-top-4 fade-in duration-200 pointer-events-auto overflow-hidden">
           <div className="p-4 flex flex-col gap-1">
             <Link 
               to="/" 

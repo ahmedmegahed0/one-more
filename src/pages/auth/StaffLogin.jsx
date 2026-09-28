@@ -32,7 +32,7 @@ export const StaffLogin = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-brand-lightBg p-4 relative">
+    <div className="min-h-[100dvh] flex items-center justify-center bg-brand-lightBg p-4 relative">
       <Link 
         to="/" 
         className="absolute top-6 left-6 flex items-center gap-2 text-neutral-500 hover:text-brand-black bg-white px-4 py-2 rounded-xl border border-neutral-200 transition-colors font-bold text-sm shadow-sm"

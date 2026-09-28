@@ -34,13 +34,13 @@ export const ProductDetailsModal = ({ isOpen, onClose, product, onAddToCart }) =
   const totalPrice = selectedVariant ? (selectedVariant.price * quantity) : 0;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm sm:p-4">
-      <div className="bg-brand-lightBg w-full sm:max-w-lg max-h-[90vh] flex flex-col rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden animate-in slide-in-from-bottom-10 sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-300">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80  sm:p-4">
+      <div className="bg-brand-lightBg w-full sm:max-w-lg max-h-[90dvh] flex flex-col rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden animate-in slide-in-from-bottom-10 sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-300">
         
         {/* Close Button Floating */}
         <button 
           onClick={onClose} 
-          className="absolute top-4 right-4 z-10 w-10 h-10 bg-black/20 hover:bg-black/40 text-white rounded-full flex items-center justify-center backdrop-blur-md transition-colors"
+          className="absolute top-4 right-4 z-10 w-10 h-10 bg-black/20 hover:bg-black/40 text-white rounded-full flex items-center justify-center  transition-colors"
         >
           <X size={20} strokeWidth={3} />
         </button>
@@ -119,7 +119,7 @@ export const ProductDetailsModal = ({ isOpen, onClose, product, onAddToCart }) =
         </div>
 
         {/* Footer Actions */}
-        <div className="p-5 sm:p-6 bg-white shrink-0 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] rounded-t-3xl relative z-20">
+        <div className="p-5 sm:p-6 pb-[calc(1.25rem+env(safe-area-inset-bottom))] bg-white shrink-0 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] rounded-t-3xl relative z-20">
           <div className="flex flex-col sm:flex-row gap-4 sm:items-center justify-between mb-5">
             
             <div className="flex items-center justify-between sm:justify-start gap-6 bg-neutral-100 rounded-2xl p-1.5 border border-neutral-200/60">

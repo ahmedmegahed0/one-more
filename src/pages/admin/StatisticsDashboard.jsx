@@ -96,7 +96,7 @@ export const StatisticsDashboard = () => {
                 <h3 className="text-4xl font-black">{stats.totalSales?.toFixed(2) || '0.00'}</h3>
                 <p className="text-white/90 text-sm mt-1 font-medium">EGP Revenue</p>
               </div>
-              <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-md">
+              <div className="p-3 bg-white/20 rounded-2xl ">
                 <TrendingUp size={28} className="text-white" />
               </div>
             </div>
@@ -153,7 +153,7 @@ export const StatisticsDashboard = () => {
             <div className="absolute -left-20 -bottom-20 w-64 h-64 bg-primary/20 rounded-full blur-3xl"></div>
             
             <div className="relative z-10 flex items-center gap-6 text-left">
-              <div className="w-16 h-16 bg-white/10 rounded-2xl backdrop-blur-md flex items-center justify-center border border-white/10 shrink-0">
+              <div className="w-16 h-16 bg-white/10 rounded-2xl  flex items-center justify-center border border-white/10 shrink-0">
                 <Package size={32} className="text-primary" />
               </div>
               <div>
@@ -165,7 +165,7 @@ export const StatisticsDashboard = () => {
               </div>
             </div>
             
-            <div className="relative z-10 shrink-0 bg-white/5 border border-white/10 px-6 py-4 rounded-2xl backdrop-blur-md self-stretch sm:self-auto flex items-center justify-center text-center">
+            <div className="relative z-10 shrink-0 bg-white/5 border border-white/10 px-6 py-4 rounded-2xl  self-stretch sm:self-auto flex items-center justify-center text-center">
                <div className="flex items-center gap-3 text-neutral-300 font-bold">
                  <TrendingUp className="text-primary" size={24} />
                  Top Performing Product

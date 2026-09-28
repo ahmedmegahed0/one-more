@@ -119,7 +119,7 @@ export const SettingsManagement = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[50vh]">
+      <div className="flex items-center justify-center min-h-[50dvh]">
         <Loader2 className="w-10 h-10 animate-spin text-primary" />
       </div>
     );
@@ -166,7 +166,7 @@ export const SettingsManagement = () => {
                 className="w-full h-full object-cover"
                 onError={(e) => { e.target.onerror = null; e.target.src = logoImgFallback; }}
               />
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity text-white">
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity text-white">
                 <ImageIcon size={28} className="mb-2" />
                 <span className="font-bold text-sm tracking-wider">CHANGE LOGO</span>
               </div>

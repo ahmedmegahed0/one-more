@@ -51,7 +51,7 @@ export const CancelOrderModal = ({ isOpen, onClose, onSuccess, order }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70  p-4">
       <div className="bg-brand-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200 border border-semantic-danger/20">
         <div className="flex items-center justify-between p-6 border-b border-semantic-danger/10 bg-semantic-danger/5">
           <h2 className="text-xl font-black text-semantic-danger tracking-tight flex items-center gap-2">

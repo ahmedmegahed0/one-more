@@ -73,12 +73,12 @@ export const Home = () => {
             {/* Left Content */}
             <div className="max-w-2xl animate-in fade-in slide-in-from-left-10 duration-700">
               {settings?.restaurantOpen ? (
-                <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-semantic-success/10 text-semantic-success font-bold text-sm mb-6 border border-semantic-success/20 backdrop-blur-md shadow-[0_0_15px_rgba(34,197,94,0.15)]">
+                <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-semantic-success/10 text-semantic-success font-bold text-sm mb-6 border border-semantic-success/20  shadow-[0_0_15px_rgba(34,197,94,0.15)]">
                   <span className="w-2 h-2 rounded-full bg-semantic-success animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
                   فاتحين دلوقتي
                 </span>
               ) : settings && (
-                <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-semantic-danger/10 text-semantic-danger font-bold text-sm mb-6 border border-semantic-danger/20 backdrop-blur-md">
+                <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-semantic-danger/10 text-semantic-danger font-bold text-sm mb-6 border border-semantic-danger/20 ">
                   <span className="w-2 h-2 rounded-full bg-semantic-danger"></span>
                   قافلين حالياً
                 </span>
@@ -120,7 +120,7 @@ export const Home = () => {
                   alt="Delicious premium burger" 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                 />
-                <div className="absolute bottom-8 left-8 z-20 bg-brand-black/80 backdrop-blur-md border border-neutral-700 px-6 py-3 rounded-2xl shadow-xl transform group-hover:-translate-y-2 transition-transform duration-500">
+                <div className="absolute bottom-8 left-8 z-20 bg-brand-black/80  border border-neutral-700 px-6 py-3 rounded-2xl shadow-xl transform group-hover:-translate-y-2 transition-transform duration-500">
                   <div className="flex items-center gap-3">
                     <div className="flex -space-x-2">
                       <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-bold text-xs shadow-md border-2 border-brand-black">100%</div>
@@ -166,6 +166,7 @@ export const Home = () => {
                     <img 
                       src={cat.imageUrl || cat.image || logoImg}
                       alt={cat.name}
+                      loading="lazy"
                       className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ${!(cat.imageUrl || cat.image) ? 'opacity-70 p-8 object-contain' : ''}`}
                       onError={(e) => { e.target.src = logoImg; e.target.className = 'w-full h-full object-contain opacity-70 p-8'; e.target.onerror = null; }}
                     />
@@ -224,21 +225,22 @@ export const Home = () => {
               </div>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                {loadingProds ? (
-                  Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)
-                ) : products.filter(p => p.categoryId === selectedCategory).length > 0 ? (
-                  products
-                    .filter(prod => prod.categoryId === selectedCategory)
-                    .map(prod => <ProductCard key={prod.id} product={prod} onAddClick={setSelectedProduct} />)
-                ) : (
-                  <div className="col-span-full text-center py-16 text-neutral-500 font-medium bg-white rounded-3xl border border-neutral-100 shadow-sm flex flex-col items-center">
-                    <div className="w-16 h-16 bg-neutral-50 rounded-full flex items-center justify-center mb-4 text-neutral-300">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                {(() => {
+                  if (loadingProds) return Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />);
+                  const filteredProducts = products.filter(p => p.categoryId === selectedCategory);
+                  if (filteredProducts.length > 0) {
+                    return filteredProducts.map(prod => <ProductCard key={prod.id} product={prod} onAddClick={setSelectedProduct} />);
+                  }
+                  return (
+                    <div className="col-span-full text-center py-16 text-neutral-500 font-medium bg-white rounded-3xl border border-neutral-100 shadow-sm flex flex-col items-center">
+                      <div className="w-16 h-16 bg-neutral-50 rounded-full flex items-center justify-center mb-4 text-neutral-300">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                      </div>
+                      <p className="text-lg text-brand-black font-bold mb-1">مفيش منتجات</p>
+                      <p className="text-sm">القسم ده لسه مفيهوش منتجات.</p>
                     </div>
-                    <p className="text-lg text-brand-black font-bold mb-1">مفيش منتجات</p>
-                    <p className="text-sm">القسم ده لسه مفيهوش منتجات.</p>
-                  </div>
-                )}
+                  );
+                })()}
               </div>
             </div>
           )}

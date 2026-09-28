@@ -29,7 +29,7 @@ export const CustomerLayout = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-brand-lightBg font-sans">
+    <div className="min-h-[100dvh] flex flex-col bg-brand-lightBg font-sans">
       {!loading && settings?.restaurantOpen === false && (
         <div className="bg-semantic-danger text-white px-4 py-3 text-center text-sm font-bold flex items-center justify-center gap-2 shadow-md z-[60] relative">
           <AlertCircle size={18} />

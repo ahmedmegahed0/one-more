@@ -91,7 +91,7 @@ export const Cart = () => {
 
   if (cartItems.length === 0 && !showSuccess) {
     return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center p-4">
+      <div className="min-h-[60dvh] flex flex-col items-center justify-center p-4">
         <div className="w-24 h-24 bg-neutral-100 rounded-full flex items-center justify-center mb-6 text-neutral-300">
           <ShoppingBag size={48} />
         </div>
@@ -313,7 +313,7 @@ export const Cart = () => {
 
       {/* Success Modal */}
       {showSuccess && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80  p-4">
           <div className="bg-white rounded-3xl shadow-2xl overflow-hidden max-w-sm w-full animate-in zoom-in-95 duration-300 p-8 text-center relative">
             <div className="w-20 h-20 bg-semantic-success/10 rounded-full flex items-center justify-center mx-auto mb-6">
               <CheckCircle className="text-semantic-success w-10 h-10" />

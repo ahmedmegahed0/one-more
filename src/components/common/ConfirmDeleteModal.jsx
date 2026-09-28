@@ -5,7 +5,7 @@ export const ConfirmDeleteModal = ({ isOpen, onClose, onConfirm, title, message,
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70  p-4">
       <div className="bg-brand-white rounded-xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         <div className="p-6">
           <div className="flex items-start justify-between mb-4">

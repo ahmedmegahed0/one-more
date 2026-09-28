@@ -34,7 +34,7 @@ export const InvoiceModal = ({ isOpen, onClose, orderId }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 print:p-0 print:bg-white print:backdrop-blur-none">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70  p-4 print:p-0 print:bg-white print:">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200 border border-neutral-100 print:shadow-none print:border-none print:rounded-none">
         
         {/* Header - Hidden in Print */}

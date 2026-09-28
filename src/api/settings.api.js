@@ -1,13 +1,29 @@
 import { apiClient } from './client';
 
+let settingsCache = null;
+let settingsPromise = null;
+
 export const settingsApi = {
-  getSettings: async () => {
-    return apiClient.get('/api/Settings');
+  getSettings: () => {
+    if (settingsCache) return Promise.resolve(settingsCache);
+    if (settingsPromise) return settingsPromise;
+    
+    settingsPromise = apiClient.get('/api/Settings').then(res => {
+      settingsCache = res;
+      settingsPromise = null;
+      return res;
+    }).catch(err => {
+      settingsPromise = null;
+      throw err;
+    });
+    return settingsPromise;
   },
 
   updateSettings: async (formData) => {
-    return apiClient.put('/api/Settings', formData, {
+    const res = await apiClient.put('/api/Settings', formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     });
+    settingsCache = null;
+    return res;
   }
 };

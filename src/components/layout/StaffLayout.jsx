@@ -15,11 +15,11 @@ export const StaffLayout = () => {
   ];
 
   return (
-    <div className="min-h-screen flex bg-brand-lightBg font-sans">
+    <div className="min-h-[100dvh] flex bg-brand-lightBg font-sans">
       {/* Mobile Sidebar Overlay */}
       {isMobileMenuOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-sm"
+          className="fixed inset-0 bg-black/70 z-40 lg:hidden "
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
@@ -88,7 +88,7 @@ export const StaffLayout = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 lg:ml-64 min-h-screen relative overflow-x-hidden flex flex-col">
+      <main className="flex-1 lg:ml-64 min-h-[100dvh] relative overflow-x-hidden flex flex-col">
         {/* Mobile Header */}
         <div className="lg:hidden bg-white border-b border-neutral-200 p-4 flex items-center gap-4 sticky top-0 z-30 shadow-sm">
           <button 

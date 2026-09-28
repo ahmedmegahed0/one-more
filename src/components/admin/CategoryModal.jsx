@@ -78,7 +78,7 @@ export const CategoryModal = ({ isOpen, onClose, onSuccess, initialData = null }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70  p-4">
       <div className="bg-brand-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in-95 duration-200 border border-neutral-100">
         <div className="flex items-center justify-between p-6 border-b border-neutral-100 bg-neutral-50/50">
           <h2 className="text-xl font-black text-brand-black tracking-tight">{isEdit ? 'Edit Category' : 'Add New Category'}</h2>
@@ -104,7 +104,7 @@ export const CategoryModal = ({ isOpen, onClose, onSuccess, initialData = null }
                 {imagePreview ? (
                   <>
                     <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" onError={(e) => { e.target.src = logoImg; e.target.onerror = null; }} />
-                    <div className="absolute inset-0 bg-brand-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
+                    <div className="absolute inset-0 bg-brand-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity ">
                       <span className="text-white font-bold flex items-center gap-2 bg-primary/90 px-4 py-2 rounded-full">
                         <Upload size={18} /> Change Image
                       </span>
@@ -117,7 +117,7 @@ export const CategoryModal = ({ isOpen, onClose, onSuccess, initialData = null }
                       <div className="w-14 h-14 rounded-full bg-white shadow-md flex items-center justify-center mb-3">
                         <Upload size={24} />
                       </div>
-                      <span className="text-sm font-bold bg-white/80 px-3 py-1 rounded-full backdrop-blur-sm shadow-sm">Click to upload image</span>
+                      <span className="text-sm font-bold bg-white/80 px-3 py-1 rounded-full  shadow-sm">Click to upload image</span>
                     </div>
                   </>
                 )}

@@ -55,7 +55,7 @@ export const AssignDeliveryModal = ({ isOpen, onClose, onSuccess, orderId }) => 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70  p-4">
       <div className="bg-brand-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200 border border-neutral-100">
         <div className="flex items-center justify-between p-6 border-b border-neutral-100 bg-neutral-50/50">
           <h2 className="text-xl font-black text-brand-black tracking-tight flex items-center gap-2">

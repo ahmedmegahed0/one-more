@@ -261,7 +261,7 @@ export const OrdersManagement = () => {
       {/* Orders List */}
       <div className="space-y-6 relative">
         {isMutating && (
-          <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px] z-10 flex items-center justify-center rounded-2xl">
+          <div className="absolute inset-0 bg-white/50 ] z-10 flex items-center justify-center rounded-2xl">
             <Loader2 className="w-8 h-8 text-primary animate-spin" />
           </div>
         )}

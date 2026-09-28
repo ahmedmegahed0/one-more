@@ -15,14 +15,15 @@ export const ProductCard = ({ product, onAddClick }) => {
           <img 
             src={product.image} 
             alt={product.name} 
+            loading="lazy"
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
             onError={(e) => { e.target.src = logoImg; e.target.onerror = null; }}
           />
         ) : (
-          <img src={logoImg} alt={product.name} className="w-full h-full object-cover opacity-80" />
+          <img src={logoImg} alt={product.name} loading="lazy" className="w-full h-full object-cover opacity-80" />
         )}
         {!product.isAvailable && (
-          <div className="absolute inset-0 bg-brand-white/60 backdrop-blur-[2px] flex items-center justify-center z-10">
+          <div className="absolute inset-0 bg-brand-white/60 ] flex items-center justify-center z-10">
             <span className="bg-brand-black text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg">
               Sold Out
             </span>

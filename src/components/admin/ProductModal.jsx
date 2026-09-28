@@ -126,7 +126,7 @@ export const ProductModal = ({ isOpen, onClose, onSuccess, initialData = null })
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70  p-4 overflow-y-auto">
       <div className="bg-brand-lightBg rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 border border-neutral-200 my-8">
         <div className="flex items-center justify-between p-6 border-b border-neutral-200 bg-white sticky top-0 z-10">
           <h2 className="text-xl font-black text-brand-black tracking-tight">
@@ -221,7 +221,7 @@ export const ProductModal = ({ isOpen, onClose, onSuccess, initialData = null })
                   onError={(e) => { e.target.onerror = null; e.target.src = logoImg; }}
                 />
                 {!imagePreview && (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/60 backdrop-blur-[2px] text-brand-black group-hover:text-primary transition-colors">
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/60 ] text-brand-black group-hover:text-primary transition-colors">
                     <ImageIcon size={32} className="mb-2 opacity-80" />
                     <span className="font-bold text-sm drop-shadow-md">Upload Image</span>
                   </div>
