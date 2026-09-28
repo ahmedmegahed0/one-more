@@ -7,7 +7,7 @@ import { CancelOrderModal } from '../../components/orders/CancelOrderModal';
 import { InvoiceModal } from '../../components/orders/InvoiceModal';
 import { ConfirmActionModal } from '../../components/common/ConfirmActionModal';
 import { useAuth } from '../../context/AuthContext';
-import { Loader2, Calendar, ClipboardList, ChevronLeft, ChevronRight, Play, Trash2 } from 'lucide-react';
+import { Loader2, Calendar, ClipboardList, ChevronLeft, ChevronRight, Play, Trash2, Bell, X } from 'lucide-react';
 
 export const OrdersManagement = () => {
   const { user } = useAuth();
@@ -40,6 +40,57 @@ export const OrdersManagement = () => {
       default: return null;
     }
   };
+
+  // --- Real-time Polling Logic ---
+  const [pendingCount, setPendingCount] = useState(0);
+  const [newOrderAlert, setNewOrderAlert] = useState(false);
+
+  const playNotificationSound = () => {
+    try {
+      // A gentle, premium notification chime
+      const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+      audio.volume = 0.5;
+      audio.play().catch(e => console.log('Audio play blocked by browser', e));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    // Only poll if we are viewing 'today' orders
+    if (dateMode !== 'today') return;
+
+    const checkPendingOrders = async () => {
+      try {
+        const res = await ordersApi.getTodayOrders({ pageIndex: 1, pageSize: 1, status: 1 });
+        const count = res.data?.data?.count ?? res.data?.count ?? 0;
+        
+        setPendingCount(prev => {
+          if (prev !== 0 && count > prev) {
+            // New order arrived!
+            setNewOrderAlert(true);
+            playNotificationSound();
+            
+            // Auto-refresh the current list if they are on 'All' or 'Pending'
+            if (activeTab === 'All' || activeTab === 'Pending') {
+              fetchOrders();
+            }
+          }
+          return count;
+        });
+      } catch (err) {
+        console.error("Polling error:", err);
+      }
+    };
+
+    // Initial check
+    checkPendingOrders();
+
+    // Poll every 15 seconds
+    const interval = setInterval(checkPendingOrders, 15000);
+    return () => clearInterval(interval);
+  }, [dateMode, activeTab]);
+  // ------------------------------
 
   const fetchOrders = async () => {
     setLoading(true);
@@ -145,6 +196,37 @@ export const OrdersManagement = () => {
           </div>
         </div>
       </div>
+
+      {/* New Order Alert Toast */}
+      {newOrderAlert && (
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[60] bg-brand-black text-white px-6 py-4 rounded-2xl shadow-[0_20px_50px_rgba(255,106,0,0.3)] flex items-center gap-5 animate-in slide-in-from-top-10 fade-in zoom-in-95 duration-500 border border-primary/30">
+          <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center text-primary relative">
+            <div className="absolute inset-0 bg-primary rounded-full animate-ping opacity-20"></div>
+            <Bell size={24} className="animate-bounce" />
+          </div>
+          <div>
+            <h3 className="font-black text-xl text-primary">أوردر جديد وصل! 🚀</h3>
+            <p className="text-sm text-neutral-300 font-medium mt-1">في عميل لسه طالب أوردر دلوقتي، ادخل جهزه.</p>
+          </div>
+          <div className="mr-6 flex items-center gap-3">
+            <button 
+              onClick={() => {
+                setNewOrderAlert(false);
+                handleTabChange('Pending');
+              }}
+              className="bg-primary text-white px-5 py-2.5 rounded-xl font-bold hover:bg-primary-dark transition-colors shadow-lg"
+            >
+              شوفه دلوقتي
+            </button>
+            <button 
+              onClick={() => setNewOrderAlert(false)} 
+              className="p-2 text-neutral-400 hover:text-white hover:bg-white/10 rounded-full transition-colors"
+            >
+              <X size={20} />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Tabs */}
       <div className="flex space-x-1 bg-neutral-200/50 p-1 rounded-2xl mb-6 overflow-x-auto">
