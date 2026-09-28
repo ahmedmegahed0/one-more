@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Loader2, Store, Mail, Lock } from 'lucide-react';
+import { Loader2, Store, Mail, Lock, ArrowLeft } from 'lucide-react';
 
 export const StaffLogin = () => {
   const [email, setEmail] = useState('');
@@ -15,7 +15,7 @@ export const StaffLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) {
-      setErrorMsg('Please fill in all fields.');
+      setErrorMsg('لو سمحت املأ كل الخانات.');
       return;
     }
     
@@ -32,14 +32,21 @@ export const StaffLogin = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-brand-lightBg p-4">
+    <div className="min-h-screen flex items-center justify-center bg-brand-lightBg p-4 relative">
+      <Link 
+        to="/" 
+        className="absolute top-6 left-6 flex items-center gap-2 text-neutral-500 hover:text-brand-black bg-white px-4 py-2 rounded-xl border border-neutral-200 transition-colors font-bold text-sm shadow-sm"
+      >
+        <ArrowLeft size={18} />
+        ارجع للموقع
+      </Link>
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 border border-neutral-100 animate-in fade-in zoom-in-95 duration-300">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-primary/10 text-primary mb-6">
             <Store size={32} />
           </div>
           <h1 className="text-3xl font-bold text-brand-black mb-2 tracking-tight">ONE MORE</h1>
-          <p className="text-primary font-medium tracking-wide">STAFF PORTAL</p>
+          <p className="text-primary font-medium tracking-wide">بوابة الموظفين</p>
           <p className="text-neutral-500 text-sm mt-3 italic">"One Bite , One More"</p>
         </div>
 
@@ -51,7 +58,7 @@ export const StaffLogin = () => {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-brand-black mb-2">Staff Email</label>
+            <label className="block text-sm font-medium text-brand-black mb-2">البريد الإلكتروني</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-neutral-400">
                 <Mail size={20} />
@@ -68,7 +75,7 @@ export const StaffLogin = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-brand-black mb-2">Password</label>
+            <label className="block text-sm font-medium text-brand-black mb-2">كلمة السر</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-neutral-400">
                 <Lock size={20} />
@@ -92,10 +99,10 @@ export const StaffLogin = () => {
             {isSubmitting ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin" />
-                Signing in...
+                جاري الدخول...
               </>
             ) : (
-              'Access Terminal'
+              'دخول'
             )}
           </button>
         </form>

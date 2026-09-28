@@ -61,8 +61,8 @@ export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions,
     }
   };
   const formatDate = (dateString) => {
-    if (!dateString) return 'Just now';
-    return new Date(dateString).toLocaleString('en-US', {
+    if (!dateString) return 'دلوقتي';
+    return new Date(dateString).toLocaleString('ar-EG', {
       month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true
     });
   };
@@ -82,9 +82,9 @@ export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions,
         </div>
         <div className="text-right flex-shrink-0 flex items-start gap-4">
           <div>
-            <div className="text-sm font-bold text-neutral-500 uppercase tracking-wider mb-1">Total</div>
+            <div className="text-sm font-bold text-neutral-500 uppercase tracking-wider mb-1">الإجمالي</div>
             <div className="text-2xl font-black text-primary leading-none">
-              {(order.total || order.finalAmount || 0).toFixed(2)} <span className="text-sm">EGP</span>
+              {(order.total || order.finalAmount || 0).toFixed(2)} <span className="text-sm">ج.م</span>
             </div>
           </div>
           
@@ -108,7 +108,7 @@ export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions,
                       }}
                       className="w-full text-left px-4 py-2 text-sm font-bold text-semantic-danger hover:bg-semantic-danger/5 flex items-center gap-2"
                     >
-                      <Trash2 size={16} /> Delete Order
+                      <Trash2 size={16} /> امسح الأوردر
                     </button>
                   </div>
                 </>
@@ -149,22 +149,22 @@ export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions,
           
           <div>
             <h4 className="font-bold text-brand-black flex items-center gap-2 mb-3">
-              <PackageOpen size={18} className="text-neutral-400" /> Order Items
+              <PackageOpen size={18} className="text-neutral-400" /> الأصناف المطلوبة
             </h4>
             <ul className="space-y-3 bg-neutral-50 p-4 rounded-xl border border-neutral-100">
               {order.items?.map((item, idx) => (
                 <li key={idx} className="flex justify-between text-sm">
                   <div>
                     <span className="font-black text-brand-black">{item.quantity}x</span>{' '}
-                    <span className="font-bold text-neutral-600">{item.productName || 'Product'} ({item.variantName || 'Variant'})</span>
+                    <span className="font-bold text-neutral-600">{item.productName || 'منتج'} ({item.variantName || 'عادي'})</span>
                     {item.comment && (
-                      <p className="text-xs text-neutral-500 italic mt-1 ml-5">Note: {item.comment}</p>
+                      <p className="text-xs text-neutral-500 italic mt-1 ml-5">ملاحظة: {item.comment}</p>
                     )}
                   </div>
                 </li>
               ))}
               {(!order.items || order.items.length === 0) && (
-                <li className="text-sm text-neutral-400 italic">Items hidden or not fetched</li>
+                <li className="text-sm text-neutral-400 italic">الأصناف مش باينة</li>
               )}
             </ul>
           </div>
@@ -174,12 +174,12 @@ export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions,
       {/* Footer Actions */}
       <div className="p-5 border-t border-neutral-100 bg-neutral-50/50 flex flex-wrap justify-end gap-3">
         <div className="flex items-center gap-3 mr-auto flex-wrap">
-          {!disableActions && [1, 2].includes(order.status) && (
+          {!disableActions && [1, 2, 3].includes(order.status) && (
             <button 
-              onClick={() => onCancel(order.id)}
+              onClick={() => onCancel(order)}
               className="px-4 py-2 rounded-xl font-bold text-semantic-danger border border-semantic-danger/20 hover:bg-semantic-danger hover:text-white transition-all flex items-center gap-2"
             >
-              <Ban size={16} /> Cancel
+              <Ban size={16} /> إلغاء
             </button>
           )}
           
@@ -187,7 +187,7 @@ export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions,
             onClick={() => onOpenInvoice(order.id)}
             className="px-4 py-2 rounded-xl font-bold text-brand-black bg-white border border-neutral-200 hover:bg-neutral-100 transition-all flex items-center gap-2 shadow-sm"
           >
-            <Receipt size={16} /> Invoice
+            <Receipt size={16} /> الفاتورة
           </button>
 
           {order.status !== 1 && (
@@ -201,7 +201,7 @@ export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions,
               }`}
             >
               {waSent ? <CheckCircle2 size={16} /> : <AlertTriangle size={16} />}
-              {waLoading ? 'Sending...' : waSent ? 'WhatsApp Sent (Resend)' : 'Send WhatsApp (Not Sent)'}
+              {waLoading ? 'جاري الإرسال...' : waSent ? 'الواتساب اتبعت (ابعت تاني)' : 'ابعت واتساب (متبعتش)'}
             </button>
           )}
         </div>
@@ -213,7 +213,7 @@ export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions,
                 onClick={() => onPrepare(order.id)}
                 className="px-6 py-2 rounded-xl font-bold text-white bg-[#61AFFE] hover:bg-blue-600 transition-all flex items-center gap-2 shadow-sm"
               >
-                <Play size={16} className="fill-white" /> Prepare Order
+                <Play size={16} className="fill-white" /> ابدأ تجهيز الطلب
               </button>
             )}
             
@@ -222,7 +222,7 @@ export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions,
                 onClick={() => onOnWay(order.id)}
                 className="px-6 py-2 rounded-xl font-bold text-white bg-primary hover:bg-primary-dark transition-all flex items-center gap-2 shadow-sm"
               >
-                <Truck size={16} /> Dispatch (On Way)
+                <Truck size={16} /> الأوردر طلع (في الطريق)
               </button>
             )}
           </div>

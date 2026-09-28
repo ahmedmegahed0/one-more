@@ -44,8 +44,8 @@ export const Menu = () => {
     <div className="flex flex-col w-full min-h-screen bg-brand-lightBg pt-8 pb-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <h1 className="text-4xl sm:text-5xl font-black text-brand-black mb-4 tracking-tight">Full Menu</h1>
-          <p className="text-neutral-500 font-medium text-lg">Everything we offer, made fresh just for you.</p>
+          <h1 className="text-4xl sm:text-5xl font-black text-brand-black mb-4 tracking-tight">المنيو الكامل</h1>
+          <p className="text-neutral-500 font-medium text-lg">كل حاجة بنعملها هنا، معمولة فريش مخصوص عشانك.</p>
         </div>
 
         {/* Main Content Area */}
@@ -72,7 +72,7 @@ export const Menu = () => {
             ))}
             {categories.length === 0 && (
               <div className="col-span-full text-center py-12 text-neutral-500 font-medium">
-                No categories available.
+                مفيش أصناف متاحة حالياً.
               </div>
             )}
           </div>
@@ -83,10 +83,10 @@ export const Menu = () => {
                 onClick={() => setSelectedCategory(null)} 
                 className="flex items-center gap-2 text-neutral-500 hover:text-brand-black font-bold transition-colors w-fit bg-neutral-50 hover:bg-neutral-100 px-4 py-2 rounded-xl"
               >
-                <ArrowLeft size={20} /> Back to Categories
+                <ArrowLeft size={20} /> ارجع للتصنيفات
               </button>
               <h2 className="text-2xl font-black text-brand-black">
-                {categories.find(c => c.id === selectedCategory)?.name || 'Category'}
+                {categories.find(c => c.id === selectedCategory)?.name || 'القسم'}
               </h2>
             </div>
             
@@ -102,8 +102,8 @@ export const Menu = () => {
                   <div className="w-16 h-16 bg-neutral-50 rounded-full flex items-center justify-center mb-4 text-neutral-300">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                   </div>
-                  <p className="text-lg text-brand-black font-bold mb-1">No items found</p>
-                  <p className="text-sm">There are no products in this category yet.</p>
+                  <p className="text-lg text-brand-black font-bold mb-1">مفيش منتجات</p>
+                  <p className="text-sm">القسم ده لسه مفيهوش منتجات.</p>
                 </div>
               )}
             </div>

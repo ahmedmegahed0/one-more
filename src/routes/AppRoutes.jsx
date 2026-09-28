@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { CustomerLayout } from '../components/layout/CustomerLayout';
 import { AdminLayout } from '../components/layout/AdminLayout';
+import { StaffLayout } from '../components/layout/StaffLayout';
 import { Home } from '../pages/public/Home';
 import { Menu } from '../pages/public/Menu';
 import { Cart } from '../pages/public/Cart';
@@ -52,8 +53,11 @@ export const AppRoutes = () => {
 
       {/* Protected Staff Routes */}
       <Route element={<ProtectedRoute role="Staff" />}>
-        <Route path="/staff" element={<Navigate to="/staff/orders" replace />} />
-        <Route path="/staff/orders" element={<div className="p-20 text-center font-bold text-2xl">Staff Terminal Under Construction</div>} />
+        <Route element={<StaffLayout />}>
+          <Route path="/staff" element={<Navigate to="/staff/orders" replace />} />
+          <Route path="/staff/orders" element={<OrdersManagement />} />
+          <Route path="/staff/customer-history" element={<CustomerHistory />} />
+        </Route>
       </Route>
       
       {/* Fallback */}

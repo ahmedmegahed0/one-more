@@ -33,7 +33,7 @@ export const CustomerLayout = () => {
       {!loading && settings?.restaurantOpen === false && (
         <div className="bg-semantic-danger text-white px-4 py-3 text-center text-sm font-bold flex items-center justify-center gap-2 shadow-md z-[60] relative">
           <AlertCircle size={18} />
-          We are currently closed and not accepting new orders. Feel free to browse our menu!
+          إحنا قافلين دلوقتي ومش بنستقبل طلبات جديدة. بس تقدر تتفرج على المنيو براحتك!
         </div>
       )}
       

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Loader2, AlertOctagon } from 'lucide-react';
 import { ordersApi } from '../../api/orders.api';
 
-export const CancelOrderModal = ({ isOpen, onClose, onSuccess, orderId }) => {
+export const CancelOrderModal = ({ isOpen, onClose, onSuccess, order }) => {
   const [reason, setReason] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -17,7 +17,7 @@ export const CancelOrderModal = ({ isOpen, onClose, onSuccess, orderId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!reason.trim()) {
-      setError('Cancellation reason is strictly required.');
+      setError('لازم تكتب سبب الإلغاء.');
       return;
     }
 
@@ -25,11 +25,24 @@ export const CancelOrderModal = ({ isOpen, onClose, onSuccess, orderId }) => {
     setError('');
 
     try {
-      await ordersApi.cancelOrder(orderId, reason.trim());
+      await ordersApi.cancelOrder(order.id, reason.trim());
+      
+      // WhatsApp message for cancellation
+      let phone = order?.customerPhoneNumber || '';
+      if (phone.startsWith('01')) {
+        phone = '2' + phone;
+      }
+      
+      const separator = '━━━━━━━━━━━━━━';
+      const message = `أهلاً بيك في ONE MORE!\n${separator}\nنعتذر لإبلاغك بأنه تم إلغاء طلبك رقم #${order?.invoiceNumber || order?.id}.\n${separator}\n*سبب الإلغاء:*\n${reason.trim()}\n${separator}\nنتمنى خدمتك في أقرب وقت!`;
+      
+      const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+      window.open(waUrl, '_blank');
+
       onSuccess();
       onClose();
     } catch (err) {
-      setError(err.response?.data?.message || err.message || 'Failed to cancel order.');
+      setError(err.response?.data?.message || err.message || 'فشل في إلغاء الطلب.');
     } finally {
       setLoading(false);
     }
@@ -43,7 +56,7 @@ export const CancelOrderModal = ({ isOpen, onClose, onSuccess, orderId }) => {
         <div className="flex items-center justify-between p-6 border-b border-semantic-danger/10 bg-semantic-danger/5">
           <h2 className="text-xl font-black text-semantic-danger tracking-tight flex items-center gap-2">
             <AlertOctagon size={20} />
-            Cancel Order
+            إلغاء الطلب
           </h2>
           <button onClick={onClose} className="text-neutral-400 hover:text-semantic-danger transition-colors bg-white p-1 rounded-lg border border-neutral-200">
             <X size={20} />
@@ -59,14 +72,14 @@ export const CancelOrderModal = ({ isOpen, onClose, onSuccess, orderId }) => {
           
           <div className="space-y-5">
             <div>
-              <label className="block text-sm font-bold text-brand-black mb-2 uppercase tracking-wide">Cancellation Reason <span className="text-semantic-danger">*</span></label>
+              <label className="block text-sm font-bold text-brand-black mb-2 uppercase tracking-wide">سبب الإلغاء <span className="text-semantic-danger">*</span></label>
               <textarea
                 required
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
                 rows={3}
                 className="w-full px-4 py-3 bg-white border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-semantic-danger/50 focus:border-semantic-danger transition-all text-brand-black font-medium placeholder:text-neutral-400 shadow-sm resize-none"
-                placeholder="e.g. Customer requested cancellation"
+                placeholder="مثال: العميل طلب الإلغاء"
               />
             </div>
           </div>
@@ -78,7 +91,7 @@ export const CancelOrderModal = ({ isOpen, onClose, onSuccess, orderId }) => {
               disabled={loading}
               className="px-6 py-3 rounded-xl font-bold text-neutral-600 bg-white border border-neutral-200 hover:bg-neutral-50 transition-colors disabled:opacity-50"
             >
-              Close
+              إلغاء
             </button>
             <button
               type="submit"
@@ -88,9 +101,9 @@ export const CancelOrderModal = ({ isOpen, onClose, onSuccess, orderId }) => {
               {loading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  Cancelling...
+                  جاري الإلغاء...
                 </>
-              ) : 'Confirm Cancellation'}
+              ) : 'تأكيد الإلغاء'}
             </button>
           </div>
         </form>

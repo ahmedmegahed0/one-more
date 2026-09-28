@@ -75,23 +75,23 @@ export const Home = () => {
               {settings?.restaurantOpen ? (
                 <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-semantic-success/10 text-semantic-success font-bold text-sm mb-6 border border-semantic-success/20 backdrop-blur-md shadow-[0_0_15px_rgba(34,197,94,0.15)]">
                   <span className="w-2 h-2 rounded-full bg-semantic-success animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
-                  Open Now
+                  فاتحين دلوقتي
                 </span>
               ) : settings && (
                 <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-semantic-danger/10 text-semantic-danger font-bold text-sm mb-6 border border-semantic-danger/20 backdrop-blur-md">
                   <span className="w-2 h-2 rounded-full bg-semantic-danger"></span>
-                  Currently Closed
+                  قافلين حالياً
                 </span>
               )}
               
-              <h1 className="text-6xl sm:text-7xl lg:text-[5.5rem] font-black text-white leading-[1.05] mb-6 tracking-tighter">
+              <h1 className="text-6xl sm:text-7xl lg:text-[5.5rem] font-black text-white leading-[1.05] mb-6 tracking-tighter" dir="ltr">
                 One Bite, <br/>
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-[#ff8c3a] to-[#ffb873] filter drop-shadow-sm">
                   One More.
                 </span>
               </h1>
               <p className="text-lg sm:text-xl text-neutral-300 mb-10 font-medium max-w-lg leading-relaxed">
-                Experience the boldest flavors in town. Crafted with premium ingredients and a passion for perfection that keeps you coming back.
+                جرب أطعم أكل في البلد. معمول بأجود المكونات وبشغف يخليك دايماً عايز كمان!
               </p>
               
               <div className="flex flex-col sm:flex-row gap-5">
@@ -101,7 +101,7 @@ export const Home = () => {
                 >
                   {/* Button shine effect */}
                   <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-[shimmer_1.5s_infinite]"></div>
-                  <span className="relative">ORDER NOW</span>
+                  <span className="relative">اطلب دلوقتي</span>
                   <ArrowRight size={22} className="relative group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
@@ -126,8 +126,8 @@ export const Home = () => {
                       <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-bold text-xs shadow-md border-2 border-brand-black">100%</div>
                     </div>
                     <div className="text-white">
-                      <p className="text-sm font-bold leading-tight">Fresh Quality</p>
-                      <p className="text-xs text-neutral-400">Premium Beef</p>
+                      <p className="text-sm font-bold leading-tight">جودة فريش</p>
+                      <p className="text-xs text-neutral-400">لحم بلدي</p>
                     </div>
                   </div>
                 </div>
@@ -148,50 +148,64 @@ export const Home = () => {
       <section id="menu-section" className="py-24 bg-brand-lightBg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="text-4xl sm:text-5xl font-black text-brand-black mb-4 tracking-tight">Our Menu</h2>
-            <p className="text-neutral-500 font-medium text-lg">Explore our full selection of delicious items, freshly prepared just for you.</p>
+            <h2 className="text-4xl sm:text-5xl font-black text-brand-black mb-4 tracking-tight">المنيو بتاعنا</h2>
+            <p className="text-neutral-500 font-medium text-lg">شوف كل الأصناف بتاعتنا، معمولة فريش مخصوص عشانك.</p>
           </div>
 
           {/* Main Content Area */}
           {selectedCategory === null ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-              {categories.slice(0, 4).map(cat => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+              {categories.slice(0, 7).map(cat => (
                 <div 
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className="bg-white rounded-3xl p-6 shadow-sm hover:shadow-xl border border-neutral-100 transition-all cursor-pointer group flex flex-col items-center text-center hover:-translate-y-2 h-full"
+                  className="bg-white rounded-[2.5rem] p-3 shadow-sm hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-neutral-100 transition-all duration-500 cursor-pointer group flex flex-col hover:-translate-y-2 h-full"
                 >
-                  <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-neutral-50 mb-4 overflow-hidden border-4 border-white shadow-md group-hover:border-primary/20 transition-all shrink-0 flex items-center justify-center">
+                  <div className="w-full aspect-square sm:aspect-[4/5] rounded-[2rem] bg-neutral-50/50 overflow-hidden relative">
+                    <div className="absolute inset-0 bg-brand-black/5 group-hover:bg-transparent transition-colors duration-500 z-10"></div>
                     <img 
                       src={cat.imageUrl || cat.image || logoImg}
                       alt={cat.name}
-                      className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${!(cat.imageUrl || cat.image) ? 'opacity-80 p-2' : ''}`}
-                      onError={(e) => { e.target.src = logoImg; e.target.onerror = null; }}
+                      className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ${!(cat.imageUrl || cat.image) ? 'opacity-70 p-8 object-contain' : ''}`}
+                      onError={(e) => { e.target.src = logoImg; e.target.className = 'w-full h-full object-contain opacity-70 p-8'; e.target.onerror = null; }}
                     />
+                    
+                    {/* Chic overlay gradient at bottom of image */}
+                    <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/20 to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   </div>
-                  <h3 className="text-lg sm:text-xl font-black text-brand-black group-hover:text-primary transition-colors line-clamp-2 mt-auto">
-                    {cat.name}
-                  </h3>
+                  
+                  <div className="pt-6 pb-4 px-2 flex flex-col items-center justify-center flex-1">
+                    <h3 className="text-xl sm:text-2xl font-black text-brand-black group-hover:text-primary transition-colors text-center tracking-tight">
+                      {cat.name}
+                    </h3>
+                    <div className="w-8 h-1 bg-primary/20 rounded-full mt-3 group-hover:w-16 group-hover:bg-primary transition-all duration-500"></div>
+                  </div>
                 </div>
               ))}
               
-              {categories.length > 4 && (
+              {categories.length > 7 && (
                 <Link 
                   to="/menu"
-                  className="bg-white rounded-3xl p-6 shadow-sm hover:shadow-xl border border-neutral-100 transition-all cursor-pointer group flex flex-col items-center justify-center text-center hover:-translate-y-2 h-full"
+                  className="bg-brand-black rounded-[2.5rem] p-3 shadow-sm hover:shadow-[0_20px_50px_rgba(255,106,0,0.2)] transition-all duration-500 cursor-pointer group flex flex-col hover:-translate-y-2 h-full border border-neutral-800"
                 >
-                  <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-primary/10 text-primary mb-4 flex items-center justify-center border-4 border-white shadow-md group-hover:bg-primary group-hover:text-white transition-all shrink-0">
-                    <ArrowRight size={40} className="group-hover:translate-x-2 transition-transform duration-300" />
+                  <div className="w-full aspect-square sm:aspect-[4/5] rounded-[2rem] bg-neutral-900/50 flex flex-col items-center justify-center relative overflow-hidden">
+                    <div className="absolute inset-0 bg-primary/10 group-hover:bg-primary/20 transition-colors duration-500"></div>
+                    <div className="w-20 h-20 rounded-full bg-primary text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500 z-10">
+                      <ArrowRight size={32} className="group-hover:-translate-x-2 transition-transform duration-500" />
+                    </div>
                   </div>
-                  <h3 className="text-lg sm:text-xl font-black text-brand-black group-hover:text-primary transition-colors mt-auto">
-                    View All
-                  </h3>
+                  <div className="pt-6 pb-4 px-2 flex flex-col items-center justify-center flex-1">
+                    <h3 className="text-xl sm:text-2xl font-black text-white group-hover:text-primary transition-colors text-center tracking-tight">
+                      شوف المنيو كامل
+                    </h3>
+                  </div>
                 </Link>
               )}
               
               {categories.length === 0 && (
-                <div className="col-span-full text-center py-12 text-neutral-500 font-medium">
-                  No categories available.
+                <div className="col-span-full text-center py-16 bg-white rounded-[2.5rem] border border-neutral-100 shadow-sm">
+                  <Utensils size={48} className="mx-auto text-neutral-300 mb-4" />
+                  <p className="text-neutral-500 font-bold text-xl">مفيش أصناف متاحة حالياً.</p>
                 </div>
               )}
             </div>
@@ -202,10 +216,10 @@ export const Home = () => {
                   onClick={() => setSelectedCategory(null)} 
                   className="flex items-center gap-2 text-neutral-500 hover:text-brand-black font-bold transition-colors w-fit bg-neutral-50 hover:bg-neutral-100 px-4 py-2 rounded-xl"
                 >
-                  <ArrowLeft size={20} /> Back to Categories
+                  <ArrowLeft size={20} /> ارجع للتصنيفات
                 </button>
                 <h2 className="text-2xl font-black text-brand-black">
-                  {categories.find(c => c.id === selectedCategory)?.name || 'Category'}
+                  {categories.find(c => c.id === selectedCategory)?.name || 'القسم'}
                 </h2>
               </div>
               
@@ -221,8 +235,8 @@ export const Home = () => {
                     <div className="w-16 h-16 bg-neutral-50 rounded-full flex items-center justify-center mb-4 text-neutral-300">
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                     </div>
-                    <p className="text-lg text-brand-black font-bold mb-1">No items found</p>
-                    <p className="text-sm">There are no products in this category yet.</p>
+                    <p className="text-lg text-brand-black font-bold mb-1">مفيش منتجات</p>
+                    <p className="text-sm">القسم ده لسه مفيهوش منتجات.</p>
                   </div>
                 )}
               </div>
@@ -239,22 +253,22 @@ export const Home = () => {
               <div className="w-20 h-20 rounded-2xl bg-primary text-white flex items-center justify-center mb-6 shadow-lg shadow-primary/20">
                 <Utensils size={40} />
               </div>
-              <h3 className="text-2xl font-black mb-3">Premium Ingredients</h3>
-              <p className="text-neutral-400 font-medium leading-relaxed">We source only the freshest, highest quality ingredients for every single bite.</p>
+              <h3 className="text-2xl font-black mb-3">مكونات فريش</h3>
+              <p className="text-neutral-400 font-medium leading-relaxed">بنجيب أنضف وأجود المكونات عشان نظبطلك الطعم في كل قطمة.</p>
             </div>
             <div className="flex flex-col items-center">
               <div className="w-20 h-20 rounded-2xl bg-primary text-white flex items-center justify-center mb-6 shadow-lg shadow-primary/20">
                 <Clock size={40} />
               </div>
-              <h3 className="text-2xl font-black mb-3">Fast Preparation</h3>
-              <p className="text-neutral-400 font-medium leading-relaxed">Hot and fresh, prepared precisely when you order it so it's perfect every time.</p>
+              <h3 className="text-2xl font-black mb-3">تحضير سريع</h3>
+              <p className="text-neutral-400 font-medium leading-relaxed">الأكل بيتعملك سخن وفريش أول ما تطلب عشان يوصلك مظبوط.</p>
             </div>
             <div className="flex flex-col items-center">
               <div className="w-20 h-20 rounded-2xl bg-primary text-white flex items-center justify-center mb-6 shadow-lg shadow-primary/20">
                 <ThumbsUp size={40} />
               </div>
-              <h3 className="text-2xl font-black mb-3">Unmatched Quality</h3>
-              <p className="text-neutral-400 font-medium leading-relaxed">Our commitment to excellence means you'll always want ONE MORE.</p>
+              <h3 className="text-2xl font-black mb-3">جودة ملهاش مثيل</h3>
+              <p className="text-neutral-400 font-medium leading-relaxed">عشان بنهتم بالتفاصيل، أكيد هترجع تطلب مننا كمان وكمان.</p>
             </div>
           </div>
         </div>

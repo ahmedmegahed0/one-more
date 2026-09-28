@@ -90,12 +90,7 @@ export const AuthProvider = ({ children }) => {
         isLoading: false,
       });
       
-      const path = location.pathname;
-      if (path.startsWith('/admin')) {
-        navigate('/admin/login', { replace: true });
-      } else {
-        navigate('/staff/login', { replace: true });
-      }
+      navigate('/', { replace: true });
     }
   };
 

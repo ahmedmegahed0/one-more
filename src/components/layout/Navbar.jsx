@@ -8,72 +8,124 @@ export const Navbar = ({ settings }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-brand-white/90 backdrop-blur-md border-b border-neutral-100 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          <Link to="/" className="flex items-center gap-2">
+    <div className="fixed top-0 left-0 w-full z-50 px-4 sm:px-6 lg:px-8 pt-6 pointer-events-none">
+      <header className="max-w-6xl mx-auto bg-white/85 backdrop-blur-xl border border-white/80 shadow-[0_8px_30px_rgba(0,0,0,0.08)] rounded-full pointer-events-auto transition-all duration-300">
+        <div className="flex justify-between items-center h-16 px-6 sm:px-8">
+          
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2 group shrink-0">
             {settings?.logo && settings.logo !== 'string' ? (
-              <img src={settings.logo.replace(/\[|\]|\(|\)/g, '')} alt="ONE MORE" className="h-10 object-contain" />
+              <img 
+                src={settings.logo.replace(/\[|\]|\(|\)/g, '')} 
+                alt="ONE MORE" 
+                className="h-9 object-contain group-hover:scale-105 transition-transform duration-300" 
+              />
             ) : (
-              <span className="text-2xl font-black text-brand-black tracking-tight">ONE<span className="text-primary">MORE</span></span>
+              <span className="text-2xl font-black text-brand-black tracking-tight group-hover:text-primary transition-colors">
+                ONE<span className="text-primary">MORE</span>
+              </span>
             )}
           </Link>
 
+          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
-            <Link to="/" className="text-brand-black hover:text-primary font-bold transition-colors">Home</Link>
-            <Link to="/menu" className="text-brand-black hover:text-primary font-bold transition-colors">Menu</Link>
+            <Link 
+              to="/" 
+              className="text-brand-black hover:text-primary font-bold text-sm transition-colors relative group py-2"
+            >
+              الرئيسية
+              <span className="absolute bottom-0 right-1/2 translate-x-1/2 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
+            </Link>
+            <Link 
+              to="/menu" 
+              className="text-brand-black hover:text-primary font-bold text-sm transition-colors relative group py-2"
+            >
+              المنيو
+              <span className="absolute bottom-0 right-1/2 translate-x-1/2 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
+            </Link>
           </nav>
 
-          <div className="hidden md:flex items-center gap-6">
+          {/* Desktop Actions */}
+          <div className="hidden md:flex items-center gap-4 shrink-0">
             {settings?.phoneNumber && (
-              <a href={`tel:${settings.phoneNumber}`} className="flex items-center gap-2 text-neutral-500 hover:text-brand-black transition-colors">
-                <Phone size={18} />
-                <span className="font-bold">{settings.phoneNumber}</span>
+              <a 
+                href={`tel:${settings.phoneNumber}`} 
+                className="flex items-center gap-2 text-neutral-500 hover:text-brand-black font-bold text-sm transition-colors px-3 py-1.5 rounded-full hover:bg-neutral-100"
+              >
+                <Phone size={16} className="text-primary" />
+                <span dir="ltr">{settings.phoneNumber}</span>
               </a>
             )}
             
-            <Link to="/cart" className="relative p-2 text-brand-black hover:text-primary transition-colors">
-              <ShoppingBag size={24} />
+            <div className="w-px h-6 bg-neutral-200 mx-1"></div>
+
+            <Link 
+              to="/cart" 
+              className="relative w-10 h-10 bg-brand-black text-white rounded-full flex items-center justify-center group hover:bg-primary transition-colors shadow-md hover:shadow-lg hover:-translate-y-0.5"
+            >
+              <ShoppingBag size={18} />
               {cartCount > 0 && (
-                <span className="absolute top-0 right-0 w-5 h-5 bg-primary text-white text-xs font-black rounded-full flex items-center justify-center transform translate-x-1/4 -translate-y-1/4 shadow-sm">
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white text-[10px] font-black rounded-full flex items-center justify-center shadow-sm border-2 border-white group-hover:border-primary transition-colors">
                   {cartCount}
                 </span>
               )}
             </Link>
           </div>
 
-          <div className="md:hidden flex items-center gap-4">
-            <Link to="/cart" className="relative p-2 text-brand-black">
-              <ShoppingBag size={24} />
+          {/* Mobile Menu Toggle */}
+          <div className="md:hidden flex items-center gap-3">
+            <Link 
+              to="/cart" 
+              className="relative w-10 h-10 bg-brand-black text-white rounded-full flex items-center justify-center shadow-md"
+            >
+              <ShoppingBag size={18} />
               {cartCount > 0 && (
-                <span className="absolute top-0 right-0 w-5 h-5 bg-primary text-white text-xs font-black rounded-full flex items-center justify-center transform translate-x-1/4 -translate-y-1/4">
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white text-[10px] font-black rounded-full flex items-center justify-center shadow-sm border-2 border-white">
                   {cartCount}
                 </span>
               )}
             </Link>
-            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 text-brand-black">
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            <button 
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
+              className="w-10 h-10 bg-neutral-100 text-brand-black rounded-full flex items-center justify-center hover:bg-neutral-200 transition-colors"
+            >
+              {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </div>
-      </div>
+      </header>
 
+      {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-brand-white border-t border-neutral-100 absolute w-full left-0 animate-in slide-in-from-top-2 shadow-lg">
-          <div className="px-4 py-6 space-y-4">
-            <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="block font-bold text-xl text-brand-black">Home</Link>
-            <Link to="/menu" onClick={() => setIsMobileMenuOpen(false)} className="block font-bold text-xl text-brand-black">Menu</Link>
+        <div className="md:hidden absolute top-28 left-4 right-4 bg-white/95 backdrop-blur-2xl border border-white shadow-2xl rounded-3xl animate-in slide-in-from-top-4 fade-in duration-200 pointer-events-auto overflow-hidden">
+          <div className="p-4 flex flex-col gap-1">
+            <Link 
+              to="/" 
+              onClick={() => setIsMobileMenuOpen(false)} 
+              className="px-6 py-4 rounded-2xl font-black text-lg text-brand-black hover:bg-neutral-50 transition-colors text-center"
+            >
+              الرئيسية
+            </Link>
+            <Link 
+              to="/menu" 
+              onClick={() => setIsMobileMenuOpen(false)} 
+              className="px-6 py-4 rounded-2xl font-black text-lg text-brand-black hover:bg-neutral-50 transition-colors text-center"
+            >
+              المنيو
+            </Link>
             
-
-
             {settings?.phoneNumber && (
-              <a href={`tel:${settings.phoneNumber}`} className="flex items-center gap-3 text-primary font-bold py-2 mt-4 border-t border-neutral-100 pt-4">
-                <Phone size={20} /> Call {settings.phoneNumber}
+              <a 
+                href={`tel:${settings.phoneNumber}`} 
+                className="mt-2 px-6 py-4 rounded-2xl bg-primary/5 text-primary flex items-center justify-center gap-3 font-black text-lg border border-primary/10"
+              >
+                <Phone size={20} />
+                <span dir="ltr">{settings.phoneNumber}</span>
               </a>
             )}
           </div>
         </div>
       )}
-    </header>
+    </div>
   );
 };

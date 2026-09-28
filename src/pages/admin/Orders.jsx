@@ -6,9 +6,11 @@ import { AssignDeliveryModal } from '../../components/orders/AssignDeliveryModal
 import { CancelOrderModal } from '../../components/orders/CancelOrderModal';
 import { InvoiceModal } from '../../components/orders/InvoiceModal';
 import { ConfirmActionModal } from '../../components/common/ConfirmActionModal';
+import { useAuth } from '../../context/AuthContext';
 import { Loader2, Calendar, ClipboardList, ChevronLeft, ChevronRight, Play, Trash2 } from 'lucide-react';
 
 export const OrdersManagement = () => {
+  const { user } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   
@@ -23,7 +25,7 @@ export const OrdersManagement = () => {
 
   // Modals
   const [assignDeliveryModal, setAssignDeliveryModal] = useState({ isOpen: false, orderId: null });
-  const [cancelModal, setCancelModal] = useState({ isOpen: false, orderId: null });
+  const [cancelModal, setCancelModal] = useState({ isOpen: false, order: null });
   const [invoiceModal, setInvoiceModal] = useState({ isOpen: false, orderId: null });
   const [prepareModal, setPrepareModal] = useState({ isOpen: false, orderId: null });
   const [deleteOrderModal, setDeleteOrderModal] = useState({ isOpen: false, orderId: null });
@@ -111,9 +113,9 @@ export const OrdersManagement = () => {
             <div className="p-2.5 bg-brand-black text-white rounded-xl shadow-md">
               <ClipboardList size={24} />
             </div>
-            Orders
+            الطلبات
           </h1>
-          <p className="text-neutral-500 mt-2 font-medium">Manage and track customer orders.</p>
+          <p className="text-neutral-500 mt-2 font-medium">تابع وأدير طلبات العملاء.</p>
         </div>
         
         <div className="flex items-center gap-3 bg-white p-2 rounded-2xl shadow-sm border border-neutral-200">
@@ -121,7 +123,7 @@ export const OrdersManagement = () => {
             onClick={() => handleDateModeChange('today')}
             className={`px-6 py-2 rounded-xl font-bold transition-all ${dateMode === 'today' ? 'bg-primary text-white shadow-md' : 'text-neutral-500 hover:bg-neutral-100'}`}
           >
-            Today's Orders
+            طلبات النهاردة
           </button>
           <div className="w-px h-8 bg-neutral-200 mx-1"></div>
           <div className="flex items-center relative">
@@ -130,7 +132,7 @@ export const OrdersManagement = () => {
               className={`px-4 py-2 rounded-xl font-bold flex items-center gap-2 transition-all ${dateMode === 'history' ? 'bg-brand-black text-white shadow-md' : 'text-neutral-500 hover:bg-neutral-100'}`}
             >
               <Calendar size={18} />
-              History
+              سجل الطلبات
             </button>
             {dateMode === 'history' && (
               <input 
@@ -156,7 +158,7 @@ export const OrdersManagement = () => {
                 : 'text-neutral-500 hover:text-brand-black hover:bg-white/50'
             }`}
           >
-            {tab === 'OnWay' ? 'On Way' : tab}
+            {tab === 'All' ? 'الكل' : tab === 'Pending' ? 'قيد الانتظار' : tab === 'Preparing' ? 'جاري التجهيز' : tab === 'OnWay' ? 'في الطريق' : tab === 'Cancelled' ? 'ملغية' : tab}
           </button>
         ))}
       </div>
@@ -178,8 +180,8 @@ export const OrdersManagement = () => {
             <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4 text-neutral-400">
               <ClipboardList size={32} />
             </div>
-            <p className="text-neutral-500 font-bold text-lg">No orders found.</p>
-            <p className="text-neutral-400 text-sm mt-1">Try changing the filters or date.</p>
+            <p className="text-neutral-500 font-bold text-lg">مفيش طلبات.</p>
+            <p className="text-neutral-400 text-sm mt-1">جرب تغير الفلاتر أو التاريخ.</p>
           </div>
         ) : (
           orders.map((order) => (
@@ -188,10 +190,10 @@ export const OrdersManagement = () => {
               order={order} 
               onPrepare={() => setPrepareModal({ isOpen: true, orderId: order.id })}
               onOnWay={() => setAssignDeliveryModal({ isOpen: true, orderId: order.id })}
-              onCancel={() => setCancelModal({ isOpen: true, orderId: order.id })}
+              onCancel={(orderObj) => setCancelModal({ isOpen: true, order: orderObj })}
               onOpenInvoice={(id) => setInvoiceModal({ isOpen: true, orderId: id })}
               disableActions={dateMode === 'history'}
-              onDelete={() => setDeleteOrderModal({ isOpen: true, orderId: order.id })}
+              onDelete={user?.role === 'Admin' ? () => setDeleteOrderModal({ isOpen: true, orderId: order.id }) : undefined}
             />
           ))
         )}
@@ -201,7 +203,7 @@ export const OrdersManagement = () => {
       {!loading && totalPages > 1 && (
         <div className="mt-8 flex items-center justify-between">
           <span className="text-sm text-neutral-500 font-bold">
-            Showing {(pageIndex - 1) * pageSize + 1} to {Math.min(pageIndex * pageSize, totalCount)} of {totalCount}
+            عرض {(pageIndex - 1) * pageSize + 1} لـ {Math.min(pageIndex * pageSize, totalCount)} من {totalCount}
           </span>
           <div className="flex items-center gap-2">
             <button
@@ -234,9 +236,9 @@ export const OrdersManagement = () => {
       />
       <CancelOrderModal 
         isOpen={cancelModal.isOpen} 
-        onClose={() => setCancelModal({ isOpen: false, orderId: null })}
+        onClose={() => setCancelModal({ isOpen: false, order: null })}
         onSuccess={fetchOrders}
-        orderId={cancelModal.orderId}
+        order={cancelModal.order}
       />
       <InvoiceModal 
         isOpen={invoiceModal.isOpen}
@@ -247,9 +249,9 @@ export const OrdersManagement = () => {
         isOpen={prepareModal.isOpen}
         onClose={() => setPrepareModal({ isOpen: false, orderId: null })}
         onConfirm={() => handlePrepare(prepareModal.orderId)}
-        title="Prepare Order?"
-        message={`Are you sure you want to mark order #${prepareModal.orderId} as preparing? The kitchen will start making it.`}
-        confirmText="Yes, Prepare it"
+        title="تجهيز الطلب؟"
+        message={`متأكد إنك عايز تبدأ في تجهيز الأوردر رقم #${prepareModal.orderId}؟ المطبخ هيبدأ يشتغله.`}
+        confirmText="أيوة، ابدأ التجهيز"
         isProcessing={isMutating}
         icon={Play}
         colorClass="text-[#61AFFE]"
@@ -260,9 +262,9 @@ export const OrdersManagement = () => {
         isOpen={deleteOrderModal.isOpen}
         onClose={() => setDeleteOrderModal({ isOpen: false, orderId: null })}
         onConfirm={() => handleDeleteOrder(deleteOrderModal.orderId)}
-        title="Delete Order?"
-        message={`Are you absolutely sure you want to DELETE order #${deleteOrderModal.orderId}? This action cannot be undone and will completely erase it from the system.`}
-        confirmText="Yes, Delete it"
+        title="مسح الطلب نهائياً؟"
+        message={`متأكد جداً إنك عايز تمسح الأوردر رقم #${deleteOrderModal.orderId}؟ الخطوة دي مش هينفع ترجع فيها والأوردر هيتمسح خالص من السيستم.`}
+        confirmText="أيوة، امسحه"
         isProcessing={isMutating}
         icon={Trash2}
         colorClass="text-semantic-danger"

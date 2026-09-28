@@ -10,16 +10,16 @@ export const AdminLayout = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { name: 'Overview', path: '/admin/statistics', icon: TrendingUp },
-    { name: 'Orders', path: '/admin/orders', icon: ClipboardList },
-    { name: 'Staff Management', path: '/admin/staff', icon: Users },
-    { name: 'Categories', path: '/admin/categories', icon: LayoutGrid },
-    { name: 'Products', path: '/admin/products', icon: PackageSearch },
-    { name: 'Coupons', path: '/admin/coupons', icon: Tag },
-    { name: 'Deliveries', path: '/admin/deliveries', icon: Truck },
-    { name: 'Delivery Areas', path: '/admin/delivery-areas', icon: MapPin },
-    { name: 'Customer History', path: '/admin/customer-history', icon: History },
-    { name: 'Settings', path: '/admin/settings', icon: Settings },
+    { name: 'الإحصائيات', path: '/admin/statistics', icon: TrendingUp },
+    { name: 'الطلبات', path: '/admin/orders', icon: ClipboardList },
+    { name: 'فريق العمل', path: '/admin/staff', icon: Users },
+    { name: 'الأقسام', path: '/admin/categories', icon: LayoutGrid },
+    { name: 'المنتجات', path: '/admin/products', icon: PackageSearch },
+    { name: 'كوبونات الخصم', path: '/admin/coupons', icon: Tag },
+    { name: 'الطيارين (الدليفري)', path: '/admin/deliveries', icon: Truck },
+    { name: 'مناطق التوصيل', path: '/admin/delivery-areas', icon: MapPin },
+    { name: 'سجل العملاء', path: '/admin/customer-history', icon: History },
+    { name: 'الإعدادات', path: '/admin/settings', icon: Settings },
   ];
 
   return (
@@ -45,7 +45,7 @@ export const AdminLayout = () => {
               <Link to="/" className="text-xl font-black tracking-tight block hover:text-primary transition-colors">
                 ONE<span className="text-primary">MORE</span>
               </Link>
-              <span className="text-[10px] font-black text-neutral-400 uppercase tracking-[0.2em]">Admin Panel</span>
+              <span className="text-[10px] font-black text-neutral-400 uppercase tracking-[0.2em]">لوحة الإدارة</span>
             </div>
           </div>
           <button 
@@ -90,7 +90,7 @@ export const AdminLayout = () => {
             className="flex items-center gap-3 px-4 py-3 w-full rounded-xl font-bold text-neutral-400 hover:bg-semantic-danger/10 hover:text-semantic-danger transition-colors duration-200"
           >
             <LogOut size={20} strokeWidth={2.5} />
-            Logout
+            تسجيل الخروج
           </button>
         </div>
       </aside>

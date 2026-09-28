@@ -7,8 +7,8 @@ export const ConfirmActionModal = ({
   onConfirm, 
   title, 
   message, 
-  confirmText = 'Confirm', 
-  cancelText = 'Cancel',
+  confirmText = 'تأكيد', 
+  cancelText = 'إلغاء',
   isProcessing = false,
   icon: Icon = HelpCircle,
   colorClass = 'text-primary',
@@ -49,7 +49,7 @@ export const ConfirmActionModal = ({
               {isProcessing ? (
                 <>
                   <Loader2 size={20} className="animate-spin" />
-                  Processing...
+                  جاري المعالجة...
                 </>
               ) : confirmText}
             </button>

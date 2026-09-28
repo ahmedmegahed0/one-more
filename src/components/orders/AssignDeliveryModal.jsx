@@ -22,7 +22,7 @@ export const AssignDeliveryModal = ({ isOpen, onClose, onSuccess, orderId }) => 
           setDeliveries(Array.isArray(data) ? data : []);
         } catch (err) {
           console.error(err);
-          setError('Failed to load couriers.');
+          setError('فشل تحميل بيانات الطيارين.');
         } finally {
           setFetchLoading(false);
         }
@@ -34,7 +34,7 @@ export const AssignDeliveryModal = ({ isOpen, onClose, onSuccess, orderId }) => 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedDeliveryId) {
-      setError('Please select a delivery person.');
+      setError('لازم تختار طيار الأول.');
       return;
     }
 
@@ -46,7 +46,7 @@ export const AssignDeliveryModal = ({ isOpen, onClose, onSuccess, orderId }) => 
       onSuccess();
       onClose();
     } catch (err) {
-      setError(err.response?.data?.message || err.message || 'Failed to assign delivery.');
+      setError(err.response?.data?.message || err.message || 'فشل في تعيين الطيار.');
     } finally {
       setLoading(false);
     }
@@ -60,7 +60,7 @@ export const AssignDeliveryModal = ({ isOpen, onClose, onSuccess, orderId }) => 
         <div className="flex items-center justify-between p-6 border-b border-neutral-100 bg-neutral-50/50">
           <h2 className="text-xl font-black text-brand-black tracking-tight flex items-center gap-2">
             <Truck size={20} className="text-primary" />
-            Assign Courier & Dispatch
+            تعيين الطيار وإخراج الطلب
           </h2>
           <button onClick={onClose} className="text-neutral-400 hover:text-semantic-danger transition-colors bg-white p-1 rounded-lg border border-neutral-200">
             <X size={20} />
@@ -76,10 +76,10 @@ export const AssignDeliveryModal = ({ isOpen, onClose, onSuccess, orderId }) => 
           
           <div className="space-y-5">
             <div>
-              <label className="block text-sm font-bold text-brand-black mb-2 uppercase tracking-wide">Select Delivery Person</label>
+              <label className="block text-sm font-bold text-brand-black mb-2 uppercase tracking-wide">اختار الطيار</label>
               {fetchLoading ? (
                 <div className="flex items-center gap-2 text-neutral-500 font-bold p-3 border border-neutral-200 rounded-xl bg-neutral-50">
-                  <Loader2 className="w-5 h-5 animate-spin" /> Loading couriers...
+                  <Loader2 className="w-5 h-5 animate-spin" /> جاري تحميل الطيارين...
                 </div>
               ) : (
                 <select
@@ -87,7 +87,7 @@ export const AssignDeliveryModal = ({ isOpen, onClose, onSuccess, orderId }) => 
                   onChange={(e) => setSelectedDeliveryId(e.target.value)}
                   className="w-full px-4 py-3 bg-white border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#61AFFE]/50 focus:border-[#61AFFE] transition-all text-brand-black font-medium shadow-sm"
                 >
-                  <option value="" disabled>Select courier...</option>
+                  <option value="" disabled>اختار الطيار...</option>
                   {deliveries.map(d => (
                     <option key={d.id} value={d.id}>{d.name} ({d.phoneNumber})</option>
                   ))}
@@ -103,7 +103,7 @@ export const AssignDeliveryModal = ({ isOpen, onClose, onSuccess, orderId }) => 
               disabled={loading}
               className="px-6 py-3 rounded-xl font-bold text-neutral-600 bg-white border border-neutral-200 hover:bg-neutral-50 transition-colors disabled:opacity-50"
             >
-              Cancel
+              إلغاء
             </button>
             <button
               type="submit"
@@ -113,9 +113,9 @@ export const AssignDeliveryModal = ({ isOpen, onClose, onSuccess, orderId }) => 
               {loading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  Assigning...
+                  تعيين...
                 </>
-              ) : 'Confirm & Dispatch'}
+              ) : 'تأكيد الإخراج'}
             </button>
           </div>
         </form>

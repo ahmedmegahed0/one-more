@@ -15,28 +15,28 @@ export const Footer = ({ settings }) => {
           </div>
           
           <div>
-            <h4 className="text-lg font-bold mb-6 text-white tracking-wide">Quick Links</h4>
+            <h4 className="text-lg font-bold mb-6 text-white tracking-wide">روابط سريعة</h4>
             <div className="space-y-3">
-              <Link to="/" className="block text-neutral-400 font-medium hover:text-primary transition-colors">Home</Link>
-              <Link to="/menu" className="block text-neutral-400 font-medium hover:text-primary transition-colors">Menu</Link>
-              <Link to="/cart" className="block text-neutral-400 font-medium hover:text-primary transition-colors">Cart</Link>
+              <Link to="/" className="block text-neutral-400 font-medium hover:text-primary transition-colors">الرئيسية</Link>
+              <Link to="/menu" className="block text-neutral-400 font-medium hover:text-primary transition-colors">المنيو</Link>
+              <Link to="/cart" className="block text-neutral-400 font-medium hover:text-primary transition-colors">السلة</Link>
               
               {isAuthenticated ? (
                 <>
                   <Link to={role === 'Admin' ? '/admin' : '/staff'} className="block text-neutral-400 font-medium hover:text-primary transition-colors">
-                    Dashboard
+                    لوحة التحكم
                   </Link>
-                  <button onClick={logout} className="block w-full text-left text-neutral-400 font-medium hover:text-semantic-danger transition-colors">
-                    Logout
+                  <button onClick={logout} className="block w-full text-right text-neutral-400 font-medium hover:text-semantic-danger transition-colors">
+                    تسجيل الخروج
                   </button>
                 </>
               ) : (
                 <>
                   <Link to="/admin/login" className="block text-neutral-400 font-medium hover:text-primary transition-colors">
-                    Admin Login
+                    دخول الإدارة
                   </Link>
                   <Link to="/staff/login" className="block text-neutral-400 font-medium hover:text-primary transition-colors">
-                    Staff Login
+                    دخول الموظفين
                   </Link>
                 </>
               )}
@@ -44,7 +44,7 @@ export const Footer = ({ settings }) => {
           </div>
 
           <div>
-            <h4 className="text-lg font-bold mb-6 text-white tracking-wide">Contact Us</h4>
+            <h4 className="text-lg font-bold mb-6 text-white tracking-wide">تواصل معانا</h4>
             <div className="space-y-4">
               {settings?.address && (
                 <div className="flex items-start gap-3 text-neutral-400 font-medium">
@@ -61,7 +61,7 @@ export const Footer = ({ settings }) => {
               {settings?.whatsAppNumber && (
                 <a href={`https://wa.me/${settings.whatsAppNumber.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-neutral-400 font-medium hover:text-white transition-colors">
                   <MessageCircle className="text-primary shrink-0" size={20} />
-                  <span>WhatsApp Us</span>
+                  <span>كلمنا واتساب</span>
                 </a>
               )}
             </div>
@@ -69,7 +69,7 @@ export const Footer = ({ settings }) => {
         </div>
         
         <div className="border-t border-neutral-800 pt-8 text-center text-neutral-500 text-sm font-medium">
-          <p>Copyright &copy; {new Date().getFullYear()} ONE MORE. All rights reserved.</p>
+          <p>حقوق النشر &copy; {new Date().getFullYear()} ONE MORE. جميع الحقوق محفوظة.</p>
         </div>
       </div>
     </footer>

@@ -15,6 +15,9 @@ export const Cart = () => {
   const [error, setError] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
   
+  const [showCoupon, setShowCoupon] = useState(false);
+  const [showNotes, setShowNotes] = useState(false);
+  
   const [formData, setFormData] = useState({
     customerName: '',
     customerPhoneNumber: '',
@@ -92,13 +95,13 @@ export const Cart = () => {
         <div className="w-24 h-24 bg-neutral-100 rounded-full flex items-center justify-center mb-6 text-neutral-300">
           <ShoppingBag size={48} />
         </div>
-        <h2 className="text-3xl font-black text-brand-black mb-3 tracking-tight">Your cart is empty</h2>
-        <p className="text-neutral-500 font-medium mb-8">Looks like you haven't added anything to your cart yet.</p>
+        <h2 className="text-3xl font-black text-brand-black mb-3 tracking-tight">سلة المشتريات بتاعتك فاضية</h2>
+        <p className="text-neutral-500 font-medium mb-8">شكلك لسه مضفتش أي حاجة في السلة.</p>
         <Link 
           to="/menu"
           className="px-8 py-4 rounded-xl bg-primary hover:bg-primary-dark text-white font-black tracking-wide transition-all shadow-[0_4px_20px_rgba(255,106,0,0.4)] hover:-translate-y-1"
         >
-          EXPLORE MENU
+          شوف المنيو
         </Link>
       </div>
     );
@@ -106,21 +109,21 @@ export const Cart = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20 animate-in fade-in duration-500">
-      <h1 className="text-4xl font-black text-brand-black mb-8 tracking-tight">Checkout</h1>
+      <h1 className="text-4xl font-black text-brand-black mb-8 tracking-tight">إتمام الطلب</h1>
       
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
         {/* Cart Items Section */}
         <div className="lg:col-span-7 space-y-6">
           <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-neutral-100">
-            <h2 className="text-xl font-black text-brand-black mb-6">Order Summary</h2>
+            <h2 className="text-xl font-black text-brand-black mb-6">ملخص الطلب</h2>
             <div className="space-y-6 divide-y divide-neutral-100">
               {cartItems.map((item, idx) => (
                 <div key={idx} className="pt-6 first:pt-0 flex flex-col sm:flex-row gap-4 sm:items-center justify-between">
                   <div className="flex-grow">
                     <h3 className="font-bold text-brand-black text-lg">{item.productName}</h3>
-                    <p className="text-sm font-bold text-neutral-400 mb-1">Variant: {item.variantName}</p>
+                    <p className="text-sm font-bold text-neutral-400 mb-1">الحجم: {item.variantName}</p>
                     {item.comment && (
-                      <p className="text-xs font-medium text-neutral-500 italic bg-neutral-50 inline-block px-2 py-1 rounded-md">Note: {item.comment}</p>
+                      <p className="text-xs font-medium text-neutral-500 italic bg-neutral-50 inline-block px-2 py-1 rounded-md">ملاحظة: {item.comment}</p>
                     )}
                   </div>
                   
@@ -161,7 +164,7 @@ export const Cart = () => {
         {/* Checkout Form Section */}
         <div className="lg:col-span-5">
           <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-neutral-100 sticky top-24">
-            <h2 className="text-xl font-black text-brand-black mb-6">Delivery Details</h2>
+            <h2 className="text-xl font-black text-brand-black mb-6">تفاصيل التوصيل</h2>
             
             {error && (
               <div className="mb-6 p-4 bg-semantic-danger/10 text-semantic-danger rounded-xl font-bold text-sm">
@@ -171,20 +174,20 @@ export const Cart = () => {
 
             <form onSubmit={handlePlaceOrder} className="space-y-5">
               <div>
-                <label className="block text-sm font-bold text-neutral-600 mb-2">Full Name *</label>
+                <label className="block text-sm font-bold text-neutral-600 mb-2">الاسم بالكامل *</label>
                 <input 
                   type="text" 
                   name="customerName"
                   value={formData.customerName}
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all font-medium"
-                  placeholder="John Doe"
+                  placeholder="اسمك هنا"
                   required
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-bold text-neutral-600 mb-2">Phone Number *</label>
+                <label className="block text-sm font-bold text-neutral-600 mb-2">رقم الموبايل *</label>
                 <input 
                   type="tel" 
                   name="customerPhoneNumber"
@@ -197,7 +200,7 @@ export const Cart = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-neutral-600 mb-2">Delivery Area *</label>
+                <label className="block text-sm font-bold text-neutral-600 mb-2">منطقة التوصيل *</label>
                 <select 
                   name="deliveryAreaId"
                   value={formData.deliveryAreaId}
@@ -206,64 +209,86 @@ export const Cart = () => {
                   required
                   disabled={loadingAreas}
                 >
-                  <option value="">Select an area...</option>
+                  <option value="">اختار المنطقة...</option>
                   {areas.map(area => (
                     <option key={area.id} value={area.id}>
-                      {area.cityName} (+{(area.deliveryFee || 0).toFixed(2)} EGP)
+                      {area.cityName} (+{(area.deliveryFee || 0).toFixed(2)} ج.م)
                     </option>
                   ))}
                 </select>
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-neutral-600 mb-2">Full Address *</label>
+                <label className="block text-sm font-bold text-neutral-600 mb-2">العنوان بالتفصيل *</label>
                 <textarea 
                   name="address"
                   value={formData.address}
                   onChange={handleInputChange}
                   rows={2}
                   className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all font-medium resize-none"
-                  placeholder="Street, Building, Floor, Apartment"
+                  placeholder="اسم الشارع، العمارة، الدور، الشقة"
                   required
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-bold text-neutral-600 mb-2">Coupon Code (Optional)</label>
-                <input 
-                  type="text" 
-                  name="couponCode"
-                  value={formData.couponCode}
-                  onChange={(e) => setFormData({ ...formData, couponCode: e.target.value.toUpperCase().replace(/\s/g, '') })}
-                  className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all font-medium uppercase tracking-widest placeholder:normal-case placeholder:tracking-normal"
-                  placeholder="Enter code here"
-                />
-              </div>
+              <div className="pt-2 space-y-4">
+                {!showCoupon ? (
+                  <button 
+                    type="button" 
+                    onClick={() => setShowCoupon(true)} 
+                    className="flex items-center gap-2 text-sm font-bold text-primary hover:text-primary-dark transition-colors w-full p-3 bg-primary/5 hover:bg-primary/10 rounded-xl border border-primary/20"
+                  >
+                    <Plus size={18} /> معاك كود خصم (كوبون) ؟
+                  </button>
+                ) : (
+                  <div className="animate-in fade-in slide-in-from-top-2 duration-300">
+                    <label className="block text-sm font-bold text-neutral-600 mb-2">كود الخصم</label>
+                    <input 
+                      type="text" 
+                      name="couponCode"
+                      value={formData.couponCode}
+                      onChange={(e) => setFormData({ ...formData, couponCode: e.target.value.toUpperCase().replace(/\s/g, '') })}
+                      className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all font-medium uppercase tracking-widest placeholder:normal-case placeholder:tracking-normal"
+                      placeholder="اكتب الكود هنا"
+                    />
+                  </div>
+                )}
 
-              <div>
-                <label className="block text-sm font-bold text-neutral-600 mb-2">Order Notes (Optional)</label>
-                <textarea 
-                  name="comment"
-                  value={formData.comment}
-                  onChange={handleInputChange}
-                  rows={2}
-                  className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all font-medium resize-none"
-                  placeholder="Any special requests for the delivery?"
-                />
+                {!showNotes ? (
+                  <button 
+                    type="button" 
+                    onClick={() => setShowNotes(true)} 
+                    className="flex items-center gap-2 text-sm font-bold text-primary hover:text-primary-dark transition-colors w-full p-3 bg-primary/5 hover:bg-primary/10 rounded-xl border border-primary/20"
+                  >
+                    <Plus size={18} /> عايز تسيب ملاحظة مع الأوردر؟
+                  </button>
+                ) : (
+                  <div className="animate-in fade-in slide-in-from-top-2 duration-300">
+                    <label className="block text-sm font-bold text-neutral-600 mb-2">ملاحظاتك</label>
+                    <textarea 
+                      name="comment"
+                      value={formData.comment}
+                      onChange={handleInputChange}
+                      rows={2}
+                      className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all font-medium resize-none"
+                      placeholder="أي ملاحظات خاصة للطلب؟"
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="pt-6 border-t border-neutral-100 space-y-3">
                 <div className="flex justify-between text-neutral-500 font-bold">
-                  <span>Subtotal</span>
-                  <span>{cartTotal.toFixed(2)} EGP</span>
+                  <span>المجموع</span>
+                  <span>{cartTotal.toFixed(2)} ج.م</span>
                 </div>
                 <div className="flex justify-between text-neutral-500 font-bold">
-                  <span>Delivery Fee</span>
-                  <span>{deliveryFee.toFixed(2)} EGP</span>
+                  <span>خدمة التوصيل</span>
+                  <span>{deliveryFee.toFixed(2)} ج.م</span>
                 </div>
                 <div className="flex justify-between text-xl font-black text-brand-black pt-3 border-t border-neutral-100">
-                  <span>Total</span>
-                  <span className="text-primary">{finalTotal.toFixed(2)} EGP</span>
+                  <span>الإجمالي النهائي</span>
+                  <span className="text-primary">{finalTotal.toFixed(2)} ج.م</span>
                 </div>
               </div>
 
@@ -276,7 +301,7 @@ export const Cart = () => {
                   <Loader2 size={24} className="animate-spin" />
                 ) : (
                   <>
-                    PLACE ORDER
+                    تأكيد الطلب
                     <ArrowRight size={20} />
                   </>
                 )}
@@ -293,8 +318,8 @@ export const Cart = () => {
             <div className="w-20 h-20 bg-semantic-success/10 rounded-full flex items-center justify-center mx-auto mb-6">
               <CheckCircle className="text-semantic-success w-10 h-10" />
             </div>
-            <h3 className="text-2xl font-black text-brand-black tracking-tight mb-2">Order Placed!</h3>
-            <p className="text-neutral-500 font-medium mb-8">We've received your order and will contact you shortly to confirm.</p>
+            <h3 className="text-2xl font-black text-brand-black tracking-tight mb-2">تم تأكيد طلبك!</h3>
+            <p className="text-neutral-500 font-medium mb-8">استلمنا طلبك وهنتواصل معاك في أقرب وقت.</p>
             <button
               onClick={() => {
                 setShowSuccess(false);
@@ -302,7 +327,7 @@ export const Cart = () => {
               }}
               className="w-full py-4 rounded-xl font-black text-white bg-primary hover:bg-primary-dark transition-all shadow-[0_4px_14px_0_rgba(255,106,0,0.39)]"
             >
-              BACK TO HOME
+              ارجع للصفحة الرئيسية
             </button>
           </div>
         </div>
