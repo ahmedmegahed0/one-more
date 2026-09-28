@@ -12,6 +12,7 @@ export const Menu = () => {
   const { addToCart } = useCart();
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
+  const [loadingCats, setLoadingCats] = useState(true);
   const [loadingProds, setLoadingProds] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -24,6 +25,8 @@ export const Menu = () => {
         setCategories(Array.isArray(catData) ? catData : []);
       } catch (err) {
         console.error("Categories fetch error", err);
+      } finally {
+        setLoadingCats(false);
       }
 
       try {
@@ -51,30 +54,37 @@ export const Menu = () => {
         {/* Main Content Area */}
         {selectedCategory === null ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-            {categories.map(cat => (
-              <div 
-                key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
-                className="bg-white rounded-3xl p-6 shadow-sm hover:shadow-xl border border-neutral-100 transition-all cursor-pointer group flex flex-col items-center text-center hover:-translate-y-2"
-              >
-                <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-neutral-50 mb-4 overflow-hidden border-4 border-white shadow-md group-hover:border-primary/20 transition-all">
-                  <img 
-                    src={cat.image || logoImg}
-                    alt={cat.name}
-                    loading="lazy"
-                    className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${!cat.image ? 'opacity-80 p-2' : ''}`}
-                    onError={(e) => { e.target.src = logoImg; e.target.onerror = null; }}
-                  />
-                </div>
-                <h3 className="text-lg sm:text-xl font-black text-brand-black group-hover:text-primary transition-colors line-clamp-2">
-                  {cat.name}
-                </h3>
+            {loadingCats ? (
+              <div className="col-span-full flex justify-center py-12">
+                <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
               </div>
-            ))}
-            {categories.length === 0 && (
-              <div className="col-span-full text-center py-12 text-neutral-500 font-medium">
-                مفيش أصناف متاحة حالياً.
-              </div>
+            ) : (
+              <>
+                {categories.map(cat => (
+                  <div 
+                    key={cat.id}
+                    onClick={() => setSelectedCategory(cat.id)}
+                    className="bg-white rounded-3xl p-6 shadow-sm hover:shadow-xl border border-neutral-100 transition-all cursor-pointer group flex flex-col items-center text-center hover:-translate-y-2"
+                  >
+                    <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-neutral-50 mb-4 overflow-hidden border-4 border-white shadow-md group-hover:border-primary/20 transition-all">
+                      <img 
+                        src={cat.image || logoImg}
+                        alt={cat.name}
+                        className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${!cat.image ? 'opacity-80 p-2' : ''}`}
+                        onError={(e) => { e.target.src = logoImg; e.target.onerror = null; }}
+                      />
+                    </div>
+                    <h3 className="text-lg sm:text-xl font-black text-brand-black group-hover:text-primary transition-colors line-clamp-2">
+                      {cat.name}
+                    </h3>
+                  </div>
+                ))}
+                {categories.length === 0 && (
+                  <div className="col-span-full text-center py-12 text-neutral-500 font-medium">
+                    مفيش أصناف متاحة حالياً.
+                  </div>
+                )}
+              </>
             )}
           </div>
         ) : (

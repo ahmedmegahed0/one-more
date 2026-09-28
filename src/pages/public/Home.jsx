@@ -95,22 +95,20 @@ export const Home = () => {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-5">
-                <button 
-                  onClick={() => document.getElementById('menu-section')?.scrollIntoView({ behavior: 'smooth' })}
+                <Link 
+                  to="/menu"
                   className="px-8 py-4 rounded-xl bg-gradient-to-r from-primary to-[#ff8c3a] text-white font-black tracking-wide text-lg transition-all duration-300 shadow-[0_8px_25px_rgba(255,106,0,0.35)] hover:shadow-[0_12px_35px_rgba(255,106,0,0.5)] hover:-translate-y-1 flex items-center justify-center gap-3 group border border-primary/50 relative overflow-hidden"
                 >
-                  {/* Button shine effect */}
-                  <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-[shimmer_1.5s_infinite]"></div>
                   <span className="relative">اطلب دلوقتي</span>
                   <ArrowLeft size={22} className="relative group-hover:-translate-x-1 transition-transform" />
-                </button>
+                </Link>
               </div>
             </div>
 
             {/* Right Content / Image showcase */}
             <div className="relative hidden lg:block animate-in fade-in zoom-in-95 slide-in-from-right-10 duration-1000 delay-200">
               {/* Decorative elements behind image */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-brand-black via-primary/10 to-brand-black rounded-full blur-3xl -z-10 animate-[pulse_6s_ease-in-out_infinite]"></div>
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-brand-black via-primary/10 to-brand-black rounded-full blur-2xl -z-10"></div>
               
               {/* Main showcase image - using a modern, appetizing framing */}
               <div className="relative z-10 w-full aspect-square rounded-[3rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-neutral-800/50 rotate-3 hover:rotate-0 transition-all duration-500 group">
@@ -155,59 +153,66 @@ export const Home = () => {
           {/* Main Content Area */}
           {selectedCategory === null ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-              {categories.slice(0, 7).map(cat => (
-                <div 
-                  key={cat.id}
-                  onClick={() => setSelectedCategory(cat.id)}
-                  className="bg-white rounded-[2.5rem] p-3 shadow-sm hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-neutral-100 transition-all duration-500 cursor-pointer group flex flex-col hover:-translate-y-2 h-full"
-                >
-                  <div className="w-full aspect-square sm:aspect-[4/5] rounded-[2rem] bg-neutral-50/50 overflow-hidden relative">
-                    <div className="absolute inset-0 bg-brand-black/5 group-hover:bg-transparent transition-colors duration-500 z-10"></div>
-                    <img 
-                      src={cat.imageUrl || cat.image || logoImg}
-                      alt={cat.name}
-                      loading="lazy"
-                      className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ${!(cat.imageUrl || cat.image) ? 'opacity-70 p-8 object-contain' : ''}`}
-                      onError={(e) => { e.target.src = logoImg; e.target.className = 'w-full h-full object-contain opacity-70 p-8'; e.target.onerror = null; }}
-                    />
-                    
-                    {/* Chic overlay gradient at bottom of image */}
-                    <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/20 to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  </div>
-                  
-                  <div className="pt-6 pb-4 px-2 flex flex-col items-center justify-center flex-1">
-                    <h3 className="text-xl sm:text-2xl font-black text-brand-black group-hover:text-primary transition-colors text-center tracking-tight">
-                      {cat.name}
-                    </h3>
-                    <div className="w-8 h-1 bg-primary/20 rounded-full mt-3 group-hover:w-16 group-hover:bg-primary transition-all duration-500"></div>
-                  </div>
+              {loadingCats ? (
+                <div className="col-span-full flex justify-center py-16">
+                  <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
                 </div>
-              ))}
-              
-              {categories.length > 7 && (
-                <Link 
-                  to="/menu"
-                  className="bg-brand-black rounded-[2.5rem] p-3 shadow-sm hover:shadow-[0_20px_50px_rgba(255,106,0,0.2)] transition-all duration-500 cursor-pointer group flex flex-col hover:-translate-y-2 h-full border border-neutral-800"
-                >
-                  <div className="w-full aspect-square sm:aspect-[4/5] rounded-[2rem] bg-neutral-900/50 flex flex-col items-center justify-center relative overflow-hidden">
-                    <div className="absolute inset-0 bg-primary/10 group-hover:bg-primary/20 transition-colors duration-500"></div>
-                    <div className="w-20 h-20 rounded-full bg-primary text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500 z-10">
-                      <ArrowRight size={32} className="group-hover:-translate-x-2 transition-transform duration-500" />
+              ) : (
+                <>
+                  {categories.slice(0, 7).map(cat => (
+                    <div 
+                      key={cat.id}
+                      onClick={() => setSelectedCategory(cat.id)}
+                      className="bg-white rounded-[2.5rem] p-3 shadow-sm hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-neutral-100 transition-all duration-500 cursor-pointer group flex flex-col hover:-translate-y-2 h-full"
+                    >
+                      <div className="w-full aspect-square sm:aspect-[4/5] rounded-[2rem] bg-neutral-50/50 overflow-hidden relative">
+                        <div className="absolute inset-0 bg-brand-black/5 group-hover:bg-transparent transition-colors duration-500 z-10"></div>
+                        <img 
+                          src={cat.imageUrl || cat.image || logoImg}
+                          alt={cat.name}
+                          className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ${!(cat.imageUrl || cat.image) ? 'opacity-70 p-8 object-contain' : ''}`}
+                          onError={(e) => { e.target.src = logoImg; e.target.className = 'w-full h-full object-contain opacity-70 p-8'; e.target.onerror = null; }}
+                        />
+                        
+                        {/* Chic overlay gradient at bottom of image */}
+                        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/20 to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      </div>
+                      
+                      <div className="pt-6 pb-4 px-2 flex flex-col items-center justify-center flex-1">
+                        <h3 className="text-xl sm:text-2xl font-black text-brand-black group-hover:text-primary transition-colors text-center tracking-tight">
+                          {cat.name}
+                        </h3>
+                        <div className="w-8 h-1 bg-primary/20 rounded-full mt-3 group-hover:w-16 group-hover:bg-primary transition-all duration-500"></div>
+                      </div>
                     </div>
-                  </div>
-                  <div className="pt-6 pb-4 px-2 flex flex-col items-center justify-center flex-1">
-                    <h3 className="text-xl sm:text-2xl font-black text-white group-hover:text-primary transition-colors text-center tracking-tight">
-                      شوف المنيو كامل
-                    </h3>
-                  </div>
-                </Link>
-              )}
-              
-              {categories.length === 0 && (
-                <div className="col-span-full text-center py-16 bg-white rounded-[2.5rem] border border-neutral-100 shadow-sm">
-                  <Utensils size={48} className="mx-auto text-neutral-300 mb-4" />
-                  <p className="text-neutral-500 font-bold text-xl">مفيش أصناف متاحة حالياً.</p>
-                </div>
+                  ))}
+                  
+                  {categories.length > 7 && (
+                    <Link 
+                      to="/menu"
+                      className="bg-brand-black rounded-[2.5rem] p-3 shadow-sm hover:shadow-[0_20px_50px_rgba(255,106,0,0.2)] transition-all duration-500 cursor-pointer group flex flex-col hover:-translate-y-2 h-full border border-neutral-800"
+                    >
+                      <div className="w-full aspect-square sm:aspect-[4/5] rounded-[2rem] bg-neutral-900/50 flex flex-col items-center justify-center relative overflow-hidden">
+                        <div className="absolute inset-0 bg-primary/10 group-hover:bg-primary/20 transition-colors duration-500"></div>
+                        <div className="w-20 h-20 rounded-full bg-primary text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500 z-10">
+                          <ArrowRight size={32} className="group-hover:-translate-x-2 transition-transform duration-500" />
+                        </div>
+                      </div>
+                      <div className="pt-6 pb-4 px-2 flex flex-col items-center justify-center flex-1">
+                        <h3 className="text-xl sm:text-2xl font-black text-white group-hover:text-primary transition-colors text-center tracking-tight">
+                          شوف المنيو كامل
+                        </h3>
+                      </div>
+                    </Link>
+                  )}
+                  
+                  {categories.length === 0 && (
+                    <div className="col-span-full text-center py-16 bg-white rounded-[2.5rem] border border-neutral-100 shadow-sm">
+                      <Utensils size={48} className="mx-auto text-neutral-300 mb-4" />
+                      <p className="text-neutral-500 font-bold text-xl">مفيش أصناف متاحة حالياً.</p>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           ) : (

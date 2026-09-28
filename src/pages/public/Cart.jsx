@@ -5,6 +5,18 @@ import { deliveryAreasApi } from '../../api/deliveryAreas.api';
 import { ordersApi } from '../../api/orders.api';
 import { Trash2, Plus, Minus, ArrowRight, ShoppingBag, Loader2, CheckCircle } from 'lucide-react';
 
+const formatEgyptianPhoneNumber = (phone) => {
+  if (!phone) return phone;
+  const arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+  let englishStr = String(phone).replace(/[٠-٩]/g, (w) => arabicDigits.indexOf(w));
+  let digits = englishStr.replace(/[^\d+]/g, '');
+  if (digits.startsWith('+20')) digits = '0' + digits.slice(3);
+  else if (digits.startsWith('0020')) digits = '0' + digits.slice(4);
+  else if (digits.startsWith('20') && digits.length === 12) digits = '0' + digits.slice(2);
+  else if (!digits.startsWith('0') && digits.length === 10) digits = '0' + digits;
+  return digits;
+};
+
 export const Cart = () => {
   const { cartItems, removeFromCart, updateQuantity, cartTotal, clearCart } = useCart();
   const navigate = useNavigate();
@@ -63,9 +75,11 @@ export const Cart = () => {
     setSubmitting(true);
     setError('');
 
+    const formattedPhone = formatEgyptianPhoneNumber(formData.customerPhoneNumber);
+
     const payload = {
       customerName: formData.customerName,
-      customerPhoneNumber: formData.customerPhoneNumber,
+      customerPhoneNumber: formattedPhone,
       deliveryAreaId: parseInt(formData.deliveryAreaId),
       address: formData.address,
       comment: formData.comment || undefined,
