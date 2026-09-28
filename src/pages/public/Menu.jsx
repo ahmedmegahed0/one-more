@@ -88,7 +88,7 @@ export const Menu = () => {
             )}
           </div>
         ) : (
-          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div>
             <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-neutral-100">
               <button 
                 onClick={() => setSelectedCategory(null)} 

@@ -50,12 +50,6 @@ export const Home = () => {
     <div className="flex flex-col w-full">
       {/* Hero Section */}
       <section className="relative bg-[#0a0a0a] overflow-hidden py-24 sm:py-32 flex items-center min-h-[600px] lg:min-h-[700px]">
-        {/* Dynamic Background Elements */}
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 blur-[120px] rounded-full"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[30%] h-[30%] bg-[#ff8c3a]/20 blur-[100px] rounded-full"></div>
-        
-        {/* Subtle grid pattern for texture */}
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-50"></div>
         
         {/* Mobile Background Image */}
         <div className="absolute inset-0 lg:hidden z-0">
@@ -71,7 +65,7 @@ export const Home = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             
             {/* Left Content */}
-            <div className="max-w-2xl animate-in fade-in slide-in-from-left-10 duration-700">
+            <div className="max-w-2xl">
               {settings?.restaurantOpen ? (
                 <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-semantic-success/10 text-semantic-success font-bold text-sm mb-6 border border-semantic-success/20  shadow-[0_0_15px_rgba(34,197,94,0.15)]">
                   <span className="w-2 h-2 rounded-full bg-semantic-success animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
@@ -95,20 +89,18 @@ export const Home = () => {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-5">
-                <Link 
-                  to="/menu"
+                <a 
+                  href="#menu-section"
                   className="px-8 py-4 rounded-xl bg-gradient-to-r from-primary to-[#ff8c3a] text-white font-black tracking-wide text-lg transition-all duration-300 shadow-[0_8px_25px_rgba(255,106,0,0.35)] hover:shadow-[0_12px_35px_rgba(255,106,0,0.5)] hover:-translate-y-1 flex items-center justify-center gap-3 group border border-primary/50 relative overflow-hidden"
                 >
-                  <span className="relative">اطلب دلوقتي</span>
-                  <ArrowLeft size={22} className="relative group-hover:-translate-x-1 transition-transform" />
-                </Link>
+                  <span className="relative z-10">اطلب دلوقتي</span>
+                  <ArrowLeft size={22} className="relative z-10 group-hover:-translate-x-1 transition-transform" />
+                </a>
               </div>
             </div>
 
             {/* Right Content / Image showcase */}
-            <div className="relative hidden lg:block animate-in fade-in zoom-in-95 slide-in-from-right-10 duration-1000 delay-200">
-              {/* Decorative elements behind image */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-brand-black via-primary/10 to-brand-black rounded-full blur-2xl -z-10"></div>
+            <div className="relative hidden lg:block">
               
               {/* Main showcase image - using a modern, appetizing framing */}
               <div className="relative z-10 w-full aspect-square rounded-[3rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-neutral-800/50 rotate-3 hover:rotate-0 transition-all duration-500 group">
@@ -130,10 +122,6 @@ export const Home = () => {
                   </div>
                 </div>
               </div>
-              
-              {/* Floating accent elements */}
-              <div className="absolute -top-6 -right-6 w-24 h-24 bg-[#ff8c3a] rounded-full blur-[40px] opacity-60"></div>
-              <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-primary rounded-full blur-[50px] opacity-40"></div>
             </div>
 
           </div>
@@ -216,7 +204,7 @@ export const Home = () => {
               )}
             </div>
           ) : (
-            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div>
               <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-neutral-100">
                 <button 
                   onClick={() => setSelectedCategory(null)} 
