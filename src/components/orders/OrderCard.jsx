@@ -17,7 +17,7 @@ export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions,
     
     const separator = '━━━━━━━━━━━━━━';
     
-    let itemsText = order.items?.map(i => `🔸 ${i.quantity}x ${i.productName || 'منتج'} (${i.variantName || 'عادي'})\n   السعر: ${(i.totalPrice || (i.unitPrice * i.quantity) || 0).toFixed(2)} ج.م`).join('\n') || '';
+    let itemsText = order.items?.map(i => `- ${i.quantity}x ${i.productName || 'منتج'} (${i.variantName || 'عادي'})\n   السعر: ${(i.totalPrice || (i.unitPrice * i.quantity) || 0).toFixed(2)} ج.م`).join('\n') || '';
     
     let subtotal = order.subtotal || order.items?.reduce((sum, item) => sum + (item.totalPrice || (item.unitPrice * item.quantity) || 0), 0) || 0;
     let total = (order.total || order.finalAmount || 0).toFixed(2);
@@ -26,7 +26,7 @@ export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions,
     
     let priceText = `إجمالي المنتجات: ${subtotalFixed} ج.م\nالتوصيل: ${deliveryFee} ج.م\nالإجمالي النهائي: *${total} ج.م*`;
     
-    let message = `أهلاً بيك في ONE MORE! 🍔\n${separator}\nاستلمنا طلبك رقم #${order.invoiceNumber || order.id} بنجاح.\n${separator}\n*تفاصيل الطلب:*\n${itemsText}\n${separator}\n*الحساب:*\n${priceText}\n${separator}\nطلبك دلوقتي قيد التجهيز ⏳ وهنتواصل معاك أول ما يخرج للتوصيل!`;
+    let message = `أهلاً بيك في ONE MORE!\n${separator}\nاستلمنا طلبك رقم #${order.invoiceNumber || order.id} بنجاح.\n${separator}\n*تفاصيل الطلب:*\n${itemsText}\n${separator}\n*الحساب:*\n${priceText}\n${separator}\nطلبك دلوقتي قيد التجهيز وهنتواصل معاك أول ما يخرج للتوصيل!`;
     
     if (order.status === 3 && order.deliveryId) {
       try {
@@ -36,7 +36,7 @@ export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions,
         const deliveryBoy = deliveries.find(d => d.id === order.deliveryId);
         
         if (deliveryBoy) {
-          message = `أهلاً بيك في ONE MORE! 🍔\n${separator}\nطلبك رقم #${order.invoiceNumber || order.id} في الطريق ليك دلوقتي! 🛵\n${separator}\n*تفاصيل الطلب:*\n${itemsText}\n${separator}\n*الحساب:*\n${priceText}\n${separator}\n*بيانات المندوب:*\nالاسم: ${deliveryBoy.name}\nرقم الموبايل: ${deliveryBoy.phoneNumber}\n${separator}\nبالهنا والشفا! ❤️`;
+          message = `أهلاً بيك في ONE MORE!\n${separator}\nطلبك رقم #${order.invoiceNumber || order.id} في الطريق ليك دلوقتي!\n${separator}\n*تفاصيل الطلب:*\n${itemsText}\n${separator}\n*الحساب:*\n${priceText}\n${separator}\n*بيانات المندوب:*\nالاسم: ${deliveryBoy.name}\nرقم الموبايل: ${deliveryBoy.phoneNumber}\n${separator}\nبالهنا والشفا!`;
         }
       } catch (err) {
         console.error("Could not fetch delivery details", err);

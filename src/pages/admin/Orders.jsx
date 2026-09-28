@@ -5,7 +5,8 @@ import { OrderCard } from '../../components/orders/OrderCard';
 import { AssignDeliveryModal } from '../../components/orders/AssignDeliveryModal';
 import { CancelOrderModal } from '../../components/orders/CancelOrderModal';
 import { InvoiceModal } from '../../components/orders/InvoiceModal';
-import { Loader2, Calendar, ClipboardList, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ConfirmActionModal } from '../../components/common/ConfirmActionModal';
+import { Loader2, Calendar, ClipboardList, ChevronLeft, ChevronRight, Play, Trash2 } from 'lucide-react';
 
 export const OrdersManagement = () => {
   const [orders, setOrders] = useState([]);
@@ -24,6 +25,8 @@ export const OrdersManagement = () => {
   const [assignDeliveryModal, setAssignDeliveryModal] = useState({ isOpen: false, orderId: null });
   const [cancelModal, setCancelModal] = useState({ isOpen: false, orderId: null });
   const [invoiceModal, setInvoiceModal] = useState({ isOpen: false, orderId: null });
+  const [prepareModal, setPrepareModal] = useState({ isOpen: false, orderId: null });
+  const [deleteOrderModal, setDeleteOrderModal] = useState({ isOpen: false, orderId: null });
   const [isMutating, setIsMutating] = useState(false);
 
   const getStatusEnum = (tab) => {
@@ -72,10 +75,10 @@ export const OrdersManagement = () => {
   };
 
   const handlePrepare = async (orderId) => {
-    if (!window.confirm('Mark this order as Preparing?')) return;
     setIsMutating(true);
     try {
       await ordersApi.moveOrderToPrepare(orderId);
+      setPrepareModal({ isOpen: false, orderId: null });
       fetchOrders();
     } catch (error) {
       alert(error.response?.data?.message || 'Failed to prepare order.');
@@ -85,10 +88,10 @@ export const OrdersManagement = () => {
   };
 
   const handleDeleteOrder = async (orderId) => {
-    if (!window.confirm('Are you absolutely sure you want to DELETE this order? This action cannot be undone and will erase the order from the database.')) return;
     setIsMutating(true);
     try {
       await adminApi.deleteOrder(orderId);
+      setDeleteOrderModal({ isOpen: false, orderId: null });
       fetchOrders();
     } catch (error) {
       alert(error.response?.data?.message || 'Failed to delete order.');
@@ -183,12 +186,12 @@ export const OrdersManagement = () => {
             <OrderCard 
               key={order.id} 
               order={order} 
-              onPrepare={() => handlePrepare(order.id)}
+              onPrepare={() => setPrepareModal({ isOpen: true, orderId: order.id })}
               onOnWay={() => setAssignDeliveryModal({ isOpen: true, orderId: order.id })}
               onCancel={() => setCancelModal({ isOpen: true, orderId: order.id })}
               onOpenInvoice={(id) => setInvoiceModal({ isOpen: true, orderId: id })}
               disableActions={dateMode === 'history'}
-              onDelete={handleDeleteOrder}
+              onDelete={() => setDeleteOrderModal({ isOpen: true, orderId: order.id })}
             />
           ))
         )}
@@ -239,6 +242,32 @@ export const OrdersManagement = () => {
         isOpen={invoiceModal.isOpen}
         onClose={() => setInvoiceModal({ isOpen: false, orderId: null })}
         orderId={invoiceModal.orderId}
+      />
+      <ConfirmActionModal 
+        isOpen={prepareModal.isOpen}
+        onClose={() => setPrepareModal({ isOpen: false, orderId: null })}
+        onConfirm={() => handlePrepare(prepareModal.orderId)}
+        title="Prepare Order?"
+        message={`Are you sure you want to mark order #${prepareModal.orderId} as preparing? The kitchen will start making it.`}
+        confirmText="Yes, Prepare it"
+        isProcessing={isMutating}
+        icon={Play}
+        colorClass="text-[#61AFFE]"
+        bgClass="bg-[#61AFFE]"
+        hoverClass="hover:bg-blue-600"
+      />
+      <ConfirmActionModal 
+        isOpen={deleteOrderModal.isOpen}
+        onClose={() => setDeleteOrderModal({ isOpen: false, orderId: null })}
+        onConfirm={() => handleDeleteOrder(deleteOrderModal.orderId)}
+        title="Delete Order?"
+        message={`Are you absolutely sure you want to DELETE order #${deleteOrderModal.orderId}? This action cannot be undone and will completely erase it from the system.`}
+        confirmText="Yes, Delete it"
+        isProcessing={isMutating}
+        icon={Trash2}
+        colorClass="text-semantic-danger"
+        bgClass="bg-semantic-danger"
+        hoverClass="hover:bg-[#B42318]"
       />
     </div>
   );
