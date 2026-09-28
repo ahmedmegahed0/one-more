@@ -68,8 +68,23 @@ export const Footer = ({ settings }) => {
           </div>
         </div>
         
-        <div className="border-t border-neutral-800 pt-8 text-center text-neutral-500 text-sm font-medium">
-          <p>حقوق النشر &copy; {new Date().getFullYear()} ONE MORE. جميع الحقوق محفوظة.</p>
+        <div className="border-t border-neutral-800 pt-8 flex flex-col items-center gap-6 text-center">
+          <p className="text-neutral-500 text-sm font-medium">حقوق النشر &copy; {new Date().getFullYear()} ONE MORE. جميع الحقوق محفوظة.</p>
+          
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 text-xs text-neutral-500 bg-brand-black px-6 py-3 rounded-2xl border border-neutral-800 shadow-inner">
+            <span className="text-neutral-400">تم التطوير بواسطة:</span>
+            <div className="flex items-center gap-4 flex-wrap justify-center">
+              <a href="tel:01067688524" className="hover:text-primary transition-colors flex items-center gap-1.5 group" dir="ltr">
+                <span className="font-bold text-neutral-300 group-hover:text-primary">Ahmed Megahed</span>
+                <span className="opacity-70 group-hover:opacity-100 transition-opacity">01067688524</span>
+              </a>
+              <div className="w-1.5 h-1.5 rounded-full bg-neutral-700 hidden sm:block"></div>
+              <a href="tel:01019806684" className="hover:text-primary transition-colors flex items-center gap-1.5 group" dir="ltr">
+                <span className="font-bold text-neutral-300 group-hover:text-primary">Gaber Badr</span>
+                <span className="opacity-70 group-hover:opacity-100 transition-opacity">01019806684</span>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
