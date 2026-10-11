@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://twomore.runasp.net';
+export const API_BASE_URL = import.meta.env?.VITE_API_BASE_URL || 'https://onemore.runasp.net';
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -81,7 +81,7 @@ apiClient.interceptors.response.use(
         if (newAccessToken) {
           localStorage.setItem('accessToken', newAccessToken);
           localStorage.setItem('refreshToken', newRefreshToken);
-          
+
           apiClient.defaults.headers.common['Authorization'] = 'Bearer ' + newAccessToken;
           originalRequest.headers.Authorization = 'Bearer ' + newAccessToken;
 

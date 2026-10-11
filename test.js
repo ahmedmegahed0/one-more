@@ -2,7 +2,7 @@ const axios = require('axios');
 
 async function test() {
   try {
-    const res = await axios.post('https://twomore.runasp.net/api/Auth/login-admin', {
+    const res = await axios.post('https://onemore.runasp.net/api/Auth/login-admin', {
       email: 'admin@onemore.com',
       password: 'password'
     });
