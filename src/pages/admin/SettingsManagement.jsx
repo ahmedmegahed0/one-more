@@ -260,7 +260,7 @@ export const SettingsManagement = () => {
               <Phone size={20} className="text-neutral-400" /> Contact & Hours
             </h3>
             
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-bold text-brand-black mb-2 uppercase tracking-wide">Phone</label>
                 <input
@@ -281,7 +281,7 @@ export const SettingsManagement = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-bold text-brand-black mb-2 uppercase tracking-wide flex items-center gap-2">
                   <Clock size={16} /> Open At

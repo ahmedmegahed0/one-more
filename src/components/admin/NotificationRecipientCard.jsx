@@ -59,34 +59,36 @@ export const NotificationRecipientCard = ({ initialEmail = '' }) => {
           Set the email address that will receive system alerts and important order notifications.
         </p>
 
-        <form onSubmit={handleSave} className="flex gap-3">
+        <form onSubmit={handleSave} className="flex flex-col sm:flex-row gap-3">
           <div className="flex-1 relative">
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="admin@onemore.com"
-              className="w-full pl-4 pr-4 py-2 border border-neutral-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-brand-black placeholder:text-neutral-400"
+              className="w-full px-4 py-2.5 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-brand-black placeholder:text-neutral-400 text-base"
             />
           </div>
-          <button
-            type="submit"
-            disabled={loading || !email}
-            className="px-5 py-2 bg-brand-black text-white rounded-lg font-medium hover:bg-brand-softBlack transition-colors disabled:opacity-50 flex items-center justify-center min-w-[100px]"
-          >
-            {loading ? <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" /> : 'Save'}
-          </button>
-          
-          {email && (
+          <div className="flex items-center gap-2">
             <button
-              type="button"
-              onClick={() => setIsDeleteModalOpen(true)}
-              className="px-3 py-2 text-semantic-danger bg-semantic-danger/5 hover:bg-semantic-danger/10 rounded-lg transition-colors"
-              title="Remove recipient"
+              type="submit"
+              disabled={loading || !email}
+              className="flex-1 sm:flex-none px-6 py-2.5 bg-brand-black text-white rounded-xl font-bold hover:bg-brand-softBlack transition-colors disabled:opacity-50 flex items-center justify-center min-w-[100px] text-sm sm:text-base active:scale-95"
             >
-              <Trash2 size={20} />
+              {loading ? <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" /> : 'Save'}
             </button>
-          )}
+            
+            {email && (
+              <button
+                type="button"
+                onClick={() => setIsDeleteModalOpen(true)}
+                className="p-2.5 text-semantic-danger bg-semantic-danger/5 hover:bg-semantic-danger/10 rounded-xl transition-colors border border-semantic-danger/20 shrink-0"
+                title="Remove recipient"
+              >
+                <Trash2 size={18} />
+              </button>
+            )}
+          </div>
         </form>
 
         {successMsg && (

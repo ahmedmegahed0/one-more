@@ -4,6 +4,7 @@ import { useCart } from '../../context/CartContext';
 import { deliveryAreasApi } from '../../api/deliveryAreas.api';
 import { ordersApi } from '../../api/orders.api';
 import { Trash2, Plus, Minus, ArrowRight, ShoppingBag, Loader2, CheckCircle } from 'lucide-react';
+import { useBodyScrollLock } from '../../components/common/useBodyScrollLock';
 
 const formatEgyptianPhoneNumber = (phone) => {
   if (!phone) return phone;
@@ -28,6 +29,11 @@ export const Cart = () => {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
+  
+  useBodyScrollLock(showSuccess, () => {
+    setShowSuccess(false);
+    navigate('/');
+  });
   
   const [showCoupon, setShowCoupon] = useState(false);
   const [showNotes, setShowNotes] = useState(false);
@@ -333,22 +339,29 @@ export const Cart = () => {
 
       {/* Success Modal */}
       {showSuccess && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80  p-4">
-          <div className="bg-white rounded-3xl shadow-2xl overflow-hidden max-w-sm w-full animate-in zoom-in-95 duration-300 p-8 text-center relative">
-            <div className="w-20 h-20 bg-semantic-success/10 rounded-full flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="text-semantic-success w-10 h-10" />
+        <div 
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-[2px] overflow-hidden"
+        >
+          <div className="bg-white rounded-3xl shadow-2xl overflow-hidden max-w-sm w-full max-h-[90dvh] flex flex-col animate-in zoom-in-95 duration-300 p-6 sm:p-8 text-center relative border border-neutral-100 my-auto">
+            <div className="overflow-y-auto modal-scroll-area flex-1">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-semantic-success/10 rounded-full flex items-center justify-center mx-auto mb-5">
+                <CheckCircle className="text-semantic-success w-8 h-8 sm:w-10 sm:h-10" />
+              </div>
+              <h3 className="text-xl sm:text-2xl font-black text-brand-black tracking-tight mb-2">تم تأكيد طلبك!</h3>
+              <p className="text-neutral-500 font-medium mb-6 text-sm sm:text-base">استلمنا طلبك وهنتواصل معاك في أقرب وقت.</p>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowSuccess(false);
+                  navigate('/');
+                }}
+                className="w-full py-3.5 sm:py-4 rounded-xl font-black text-white bg-primary hover:bg-primary-dark transition-all shadow-[0_4px_14px_0_rgba(255,106,0,0.39)] text-base active:scale-95"
+              >
+                ارجع للصفحة الرئيسية
+              </button>
             </div>
-            <h3 className="text-2xl font-black text-brand-black tracking-tight mb-2">تم تأكيد طلبك!</h3>
-            <p className="text-neutral-500 font-medium mb-8">استلمنا طلبك وهنتواصل معاك في أقرب وقت.</p>
-            <button
-              onClick={() => {
-                setShowSuccess(false);
-                navigate('/');
-              }}
-              className="w-full py-4 rounded-xl font-black text-white bg-primary hover:bg-primary-dark transition-all shadow-[0_4px_14px_0_rgba(255,106,0,0.39)]"
-            >
-              ارجع للصفحة الرئيسية
-            </button>
           </div>
         </div>
       )}

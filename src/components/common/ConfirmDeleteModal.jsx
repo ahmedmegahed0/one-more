@@ -1,52 +1,47 @@
 import React from 'react';
-import { AlertTriangle, X } from 'lucide-react';
+import { AlertTriangle, Loader2 } from 'lucide-react';
+import { Modal } from './Modal';
 
 export const ConfirmDeleteModal = ({ isOpen, onClose, onConfirm, title, message, isDeleting }) => {
-  if (!isOpen) return null;
+  const footerActions = (
+    <div className="flex flex-col-reverse sm:flex-row gap-2.5 w-full sm:w-auto justify-end">
+      <button
+        type="button"
+        onClick={onClose}
+        disabled={isDeleting}
+        className="w-full sm:w-auto px-5 py-2.5 rounded-xl font-bold text-brand-black bg-neutral-100 hover:bg-neutral-200 transition-colors disabled:opacity-50 text-sm sm:text-base text-center"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        onClick={onConfirm}
+        disabled={isDeleting}
+        className="w-full sm:w-auto px-6 py-2.5 rounded-xl font-bold text-white bg-semantic-danger hover:bg-[#B42318] transition-colors flex items-center justify-center gap-2 disabled:opacity-50 shadow-sm text-sm sm:text-base active:scale-95 text-center"
+      >
+        {isDeleting ? (
+          <>
+            <Loader2 className="w-4 h-4 animate-spin" />
+            Deleting...
+          </>
+        ) : 'Delete'}
+      </button>
+    </div>
+  );
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70  p-4">
-      <div className="bg-brand-white rounded-xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-        <div className="p-6">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center gap-3 text-semantic-danger">
-              <div className="bg-semantic-danger/10 p-2 rounded-full">
-                <AlertTriangle size={24} />
-              </div>
-              <h2 className="text-xl font-bold">{title || 'Confirm Deletion'}</h2>
-            </div>
-            <button onClick={onClose} className="text-neutral-500 hover:text-brand-black transition-colors">
-              <X size={20} />
-            </button>
-          </div>
-          
-          <div className="text-neutral-500 text-sm leading-relaxed">
-            {message || 'Are you sure you want to delete this? This action cannot be undone.'}
-          </div>
-
-          <div className="mt-8 flex justify-end gap-3">
-            <button
-              onClick={onClose}
-              disabled={isDeleting}
-              className="px-4 py-2 rounded-lg font-medium text-brand-black bg-neutral-100 hover:bg-neutral-200 transition-colors disabled:opacity-50"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={onConfirm}
-              disabled={isDeleting}
-              className="px-4 py-2 rounded-lg font-medium text-white bg-semantic-danger hover:bg-[#B42318] transition-colors flex items-center gap-2 disabled:opacity-50 shadow-sm"
-            >
-              {isDeleting ? (
-                <>
-                  <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                  Deleting...
-                </>
-              ) : 'Delete'}
-            </button>
-          </div>
-        </div>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={title || 'Confirm Deletion'}
+      icon={AlertTriangle}
+      variant="danger"
+      maxWidth="md"
+      footer={footerActions}
+    >
+      <div className="text-neutral-600 text-sm sm:text-base leading-relaxed font-medium">
+        {message || 'Are you sure you want to delete this? This action cannot be undone.'}
       </div>
-    </div>
+    </Modal>
   );
 };

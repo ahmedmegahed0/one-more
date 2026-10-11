@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { X, Loader2, Tag } from 'lucide-react';
+import { Loader2, Tag } from 'lucide-react';
+import { Modal } from '../common/Modal';
 import { couponsApi } from '../../api/coupons.api';
 
 export const CreateCouponModal = ({ isOpen, onClose, onSuccess }) => {
@@ -15,8 +16,6 @@ export const CreateCouponModal = ({ isOpen, onClose, onSuccess }) => {
       setError('');
     }
   }, [isOpen]);
-
-  if (!isOpen) return null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,81 +47,83 @@ export const CreateCouponModal = ({ isOpen, onClose, onSuccess }) => {
     setCode(e.target.value.toUpperCase().replace(/\s/g, ''));
   };
 
+  const footerActions = (
+    <>
+      <button
+        type="button"
+        onClick={onClose}
+        disabled={loading}
+        className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl font-bold text-neutral-600 bg-white border border-neutral-200 hover:bg-neutral-50 transition-colors disabled:opacity-50 text-sm sm:text-base"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        disabled={loading}
+        className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl font-bold text-white bg-primary hover:bg-primary-dark transition-all flex items-center gap-2 disabled:opacity-50 shadow-[0_4px_14px_0_rgba(255,106,0,0.39)] text-sm sm:text-base active:scale-95"
+      >
+        {loading ? (
+          <>
+            <Loader2 className="w-5 h-5 animate-spin" />
+            Creating...
+          </>
+        ) : 'Create Coupon'}
+      </button>
+    </>
+  );
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70  p-4">
-      <div className="bg-brand-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200 border border-neutral-100">
-        <div className="flex items-center justify-between p-6 border-b border-neutral-100 bg-neutral-50/50">
-          <h2 className="text-xl font-black text-brand-black tracking-tight flex items-center gap-2">
-            <Tag size={20} className="text-primary" />
-            Create Coupon
-          </h2>
-          <button onClick={onClose} className="text-neutral-400 hover:text-semantic-danger transition-colors bg-white p-1 rounded-lg border border-neutral-200">
-            <X size={20} />
-          </button>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Create Coupon"
+      subtitle="Add a promo code with a custom percentage discount"
+      icon={Tag}
+      maxWidth="md"
+      asForm
+      onSubmit={handleSubmit}
+      footer={footerActions}
+    >
+      {error && (
+        <div className="p-4 rounded-xl bg-semantic-danger/10 text-semantic-danger text-sm font-bold border border-semantic-danger/20 flex items-center">
+          {error}
+        </div>
+      )}
+      
+      <div className="space-y-5">
+        <div>
+          <label className="block text-xs sm:text-sm font-bold text-brand-black mb-1.5 uppercase tracking-wide">
+            Coupon Code <span className="text-semantic-danger">*</span>
+          </label>
+          <input
+            type="text"
+            required
+            maxLength={20}
+            value={code}
+            onChange={handleCodeChange}
+            className="w-full px-4 py-3 bg-white border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-brand-black font-black placeholder:text-neutral-300 shadow-sm uppercase tracking-widest text-base"
+            placeholder="e.g. SUMMER20"
+          />
+          <p className="text-xs text-neutral-400 mt-1.5 font-medium">Use alphanumeric characters only. Auto-uppercased.</p>
         </div>
         
-        <form onSubmit={handleSubmit} className="p-6">
-          {error && (
-            <div className="mb-5 p-4 rounded-xl bg-semantic-danger/10 text-semantic-danger text-sm font-bold border border-semantic-danger/20 flex items-center">
-              {error}
-            </div>
-          )}
-          
-          <div className="space-y-6">
-            <div>
-              <label className="block text-sm font-bold text-brand-black mb-2 uppercase tracking-wide">Coupon Code</label>
-              <input
-                type="text"
-                required
-                maxLength={20}
-                value={code}
-                onChange={handleCodeChange}
-                className="w-full px-4 py-3 bg-white border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-brand-black font-black placeholder:text-neutral-300 shadow-sm uppercase tracking-widest"
-                placeholder="e.g. SUMMER20"
-              />
-              <p className="text-xs text-neutral-400 mt-1.5 font-medium">Use alphanumeric characters only. Auto-uppercased.</p>
-            </div>
-            
-            <div>
-              <label className="block text-sm font-bold text-brand-black mb-2 uppercase tracking-wide">Discount Percentage (%)</label>
-              <input
-                type="number"
-                required
-                min="0.1"
-                max="100"
-                step="0.5"
-                value={discountPercentage}
-                onChange={(e) => setDiscountPercentage(e.target.value)}
-                className="w-full px-4 py-3 bg-white border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-brand-black font-medium placeholder:text-neutral-300 shadow-sm"
-                placeholder="e.g. 10.5"
-              />
-            </div>
-          </div>
-
-          <div className="mt-10 flex justify-end gap-3 pt-6 border-t border-neutral-100">
-            <button
-              type="button"
-              onClick={onClose}
-              disabled={loading}
-              className="px-6 py-3 rounded-xl font-bold text-neutral-600 bg-white border border-neutral-200 hover:bg-neutral-50 transition-colors disabled:opacity-50"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="px-8 py-3 rounded-xl font-bold text-white bg-primary hover:bg-primary-dark transition-all flex items-center gap-2 disabled:opacity-50 shadow-[0_4px_14px_0_rgba(255,106,0,0.39)] hover:shadow-[0_6px_20px_rgba(255,106,0,0.23)]"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  Creating...
-                </>
-              ) : 'Create Coupon'}
-            </button>
-          </div>
-        </form>
+        <div>
+          <label className="block text-xs sm:text-sm font-bold text-brand-black mb-1.5 uppercase tracking-wide">
+            Discount Percentage (%) <span className="text-semantic-danger">*</span>
+          </label>
+          <input
+            type="number"
+            required
+            min="0.1"
+            max="100"
+            step="0.5"
+            value={discountPercentage}
+            onChange={(e) => setDiscountPercentage(e.target.value)}
+            className="w-full px-4 py-3 bg-white border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-brand-black font-medium placeholder:text-neutral-300 shadow-sm text-base"
+            placeholder="e.g. 10.5"
+          />
+        </div>
       </div>
-    </div>
+    </Modal>
   );
 };

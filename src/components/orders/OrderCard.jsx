@@ -99,16 +99,18 @@ export const OrderCard = ({ order, onPrepare, onOnWay, onCancel, disableActions,
               
               {showMenu && (
                 <>
-                  <div className="fixed inset-0 z-10" onClick={() => setShowMenu(false)}></div>
-                  <div className="absolute top-full left-0 sm:right-0 sm:left-auto mt-2 w-48 bg-white rounded-xl shadow-lg border border-neutral-100 z-50 py-1 animate-in fade-in slide-in-from-top-2">
+                  <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)}></div>
+                  <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-neutral-200 z-50 py-1.5 animate-in fade-in slide-in-from-top-2">
                     <button
+                      type="button"
                       onClick={() => {
                         setShowMenu(false);
                         onDelete(order.id);
                       }}
-                      className="w-full text-left px-4 py-2 text-sm font-bold text-semantic-danger hover:bg-semantic-danger/5 flex items-center gap-2"
+                      className="w-full text-right sm:text-left px-4 py-2.5 text-sm font-bold text-semantic-danger hover:bg-semantic-danger/10 flex items-center justify-between transition-colors"
                     >
-                      <Trash2 size={16} /> امسح الأوردر
+                      <span>امسح الأوردر</span>
+                      <Trash2 size={16} />
                     </button>
                   </div>
                 </>

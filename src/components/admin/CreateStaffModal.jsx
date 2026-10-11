@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { X } from 'lucide-react';
+import { UserPlus, Loader2 } from 'lucide-react';
+import { Modal } from '../common/Modal';
 import { adminApi } from '../../api/admin.api';
 
 export const CreateStaffModal = ({ isOpen, onClose, onSuccess }) => {
@@ -8,14 +9,12 @@ export const CreateStaffModal = ({ isOpen, onClose, onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  if (!isOpen) return null;
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     try {
-      await adminApi.createStaff({ username, password });
+      await adminApi.createStaff({ username: username.trim(), password });
       onSuccess();
       setUsername('');
       setPassword('');
@@ -27,74 +26,79 @@ export const CreateStaffModal = ({ isOpen, onClose, onSuccess }) => {
     }
   };
 
+  const footerActions = (
+    <>
+      <button
+        type="button"
+        onClick={onClose}
+        disabled={loading}
+        className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl font-bold text-neutral-600 bg-white border border-neutral-200 hover:bg-neutral-50 transition-colors disabled:opacity-50 text-sm sm:text-base"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        disabled={loading}
+        className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl font-bold text-white bg-primary hover:bg-primary-dark transition-all flex items-center gap-2 disabled:opacity-50 shadow-[0_4px_14px_0_rgba(255,106,0,0.39)] text-sm sm:text-base active:scale-95"
+      >
+        {loading ? (
+          <>
+            <Loader2 className="w-5 h-5 animate-spin" />
+            Creating...
+          </>
+        ) : 'Create Staff'}
+      </button>
+    </>
+  );
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70  p-4">
-      <div className="bg-brand-white rounded-xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-        <div className="flex items-center justify-between p-6 border-b border-neutral-100">
-          <h2 className="text-xl font-bold text-brand-black">Add New Staff</h2>
-          <button onClick={onClose} className="text-neutral-500 hover:text-brand-black transition-colors">
-            <X size={20} />
-          </button>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Add New Staff"
+      subtitle="Create credentials for employee kitchen & dashboard access"
+      icon={UserPlus}
+      maxWidth="md"
+      asForm
+      onSubmit={handleSubmit}
+      footer={footerActions}
+    >
+      {error && (
+        <div className="p-4 rounded-xl bg-semantic-danger/10 text-semantic-danger text-sm font-bold border border-semantic-danger/20 flex items-center">
+          {error}
+        </div>
+      )}
+      
+      <div className="space-y-5">
+        <div>
+          <label className="block text-xs sm:text-sm font-bold text-brand-black mb-1.5 uppercase tracking-wide">
+            Email (Username) <span className="text-semantic-danger">*</span>
+          </label>
+          <input
+            type="email"
+            required
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="w-full px-4 py-3 bg-white border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-brand-black placeholder:text-neutral-400 font-medium shadow-sm text-base"
+            placeholder="staff@onemore.com"
+          />
         </div>
         
-        <form onSubmit={handleSubmit} className="p-6">
-          {error && (
-            <div className="mb-5 p-3 rounded-lg bg-semantic-danger/10 text-semantic-danger text-sm font-medium">
-              {error}
-            </div>
-          )}
-          
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-brand-black mb-1.5">Email (Username)</label>
-              <input
-                type="email"
-                required
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-4 py-2 border border-neutral-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-brand-black placeholder:text-neutral-400"
-                placeholder="staff@onemore.com"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-brand-black mb-1.5">Password</label>
-              <input
-                type="password"
-                required
-                minLength={6}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2 border border-neutral-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-brand-black placeholder:text-neutral-400"
-                placeholder="Enter secure password"
-              />
-            </div>
-          </div>
-
-          <div className="mt-8 flex justify-end gap-3">
-            <button
-              type="button"
-              onClick={onClose}
-              disabled={loading}
-              className="px-4 py-2 rounded-lg font-medium text-brand-black bg-neutral-100 hover:bg-neutral-200 transition-colors disabled:opacity-50"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="px-4 py-2 rounded-lg font-medium text-white bg-primary hover:bg-primary-dark transition-colors flex items-center gap-2 disabled:opacity-50 shadow-sm"
-            >
-              {loading ? (
-                <>
-                  <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                  Creating...
-                </>
-              ) : 'Create Staff'}
-            </button>
-          </div>
-        </form>
+        <div>
+          <label className="block text-xs sm:text-sm font-bold text-brand-black mb-1.5 uppercase tracking-wide">
+            Password <span className="text-semantic-danger">*</span>
+          </label>
+          <input
+            type="password"
+            required
+            minLength={6}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-3 bg-white border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-brand-black placeholder:text-neutral-400 font-medium shadow-sm text-base"
+            placeholder="Minimum 6 characters"
+          />
+        </div>
       </div>
-    </div>
+    </Modal>
   );
 };
