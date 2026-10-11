@@ -1,11 +1,23 @@
 import { apiClient } from './client';
+import { apiCache } from './cache';
 
 export const healthApi = {
-  getApiInfo: async () => {
-    return apiClient.get('/');
+  getApiInfo: () => {
+    return apiCache.fetch({
+      url: '/',
+      fetcher: () => apiClient.get('/'),
+      ttlMs: 60 * 1000,
+      tag: 'health'
+    });
   },
 
-  getHealthCheck: async () => {
-    return apiClient.get('/health');
+  getHealthCheck: (forceRefresh = false) => {
+    return apiCache.fetch({
+      url: '/health',
+      fetcher: () => apiClient.get('/health'),
+      ttlMs: 30 * 1000, // 30 seconds
+      tag: 'health',
+      forceRefresh
+    });
   }
 };

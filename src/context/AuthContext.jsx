@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authApi } from '../api/auth.api';
+import { apiCache } from '../api/cache';
 
 const AuthContext = createContext(undefined);
 
@@ -81,6 +82,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('userRole');
+      apiCache.clearAll();
       setSession({
         role: null,
         accessToken: null,

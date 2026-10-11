@@ -1,21 +1,35 @@
 import { apiClient } from './client';
+import { apiCache } from './cache';
 
 export const deliveriesApi = {
-  getDeliveries: async (pageIndex = 1, pageSize = 10) => {
-    return apiClient.get('/api/Deliveries', {
-      params: { PageIndex: pageIndex, PageSize: pageSize }
+  getDeliveries: (pageIndex = 1, pageSize = 10, forceRefresh = false) => {
+    return apiCache.fetch({
+      url: '/api/Deliveries',
+      params: { PageIndex: pageIndex, PageSize: pageSize },
+      fetcher: () => apiClient.get('/api/Deliveries', {
+        params: { PageIndex: pageIndex, PageSize: pageSize }
+      }),
+      ttlMs: 3 * 60 * 1000, // 3 minutes cache
+      tag: 'deliveries',
+      forceRefresh
     });
   },
 
   createDelivery: async (data) => {
-    return apiClient.post('/api/Deliveries', data);
+    const res = await apiClient.post('/api/Deliveries', data);
+    apiCache.invalidateByTag('deliveries');
+    return res;
   },
 
   updateDelivery: async (id, data) => {
-    return apiClient.put(`/api/Deliveries/${id}`, { id, ...data });
+    const res = await apiClient.put(`/api/Deliveries/${id}`, { id, ...data });
+    apiCache.invalidateByTag('deliveries');
+    return res;
   },
 
   deleteDelivery: async (id) => {
-    return apiClient.delete(`/api/Deliveries/${id}`);
+    const res = await apiClient.delete(`/api/Deliveries/${id}`);
+    apiCache.invalidateByTag('deliveries');
+    return res;
   }
 };

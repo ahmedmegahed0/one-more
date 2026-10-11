@@ -50,6 +50,9 @@ export const ProductDetailsModal = ({ isOpen, onClose, product, onAddToCart }) =
           <img 
             src={product.image || logoImg} 
             alt={product.name} 
+            decoding="async"
+            width={500}
+            height={256}
             className={`w-full h-full transition-transform duration-500 hover:scale-105 ${!product.image ? 'object-contain p-8' : 'object-cover'}`}
             onError={(e) => { 
               e.target.onerror = null; 

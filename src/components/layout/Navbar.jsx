@@ -6,9 +6,10 @@ import { useCart } from '../../context/CartContext';
 export const Navbar = ({ settings }) => {
   const { cartCount } = useCart();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isClosed = settings?.restaurantOpen === false;
 
   return (
-    <div className="fixed top-0 left-0 w-full z-50 px-4 sm:px-6 lg:px-8 pt-6 pointer-events-none">
+    <div className={`fixed ${isClosed ? 'top-12' : 'top-0'} left-0 w-full z-50 px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 pointer-events-none transition-all duration-300`}>
       <header className="max-w-6xl mx-auto bg-white/85  border border-white/80 shadow-[0_8px_30px_rgba(0,0,0,0.08)] rounded-full pointer-events-auto transition-all duration-300">
         <div className="flex justify-between items-center h-16 px-6 sm:px-8">
           
@@ -18,6 +19,8 @@ export const Navbar = ({ settings }) => {
               <img 
                 src={settings.logo.replace(/\[|\]|\(|\)/g, '')} 
                 alt="ONE MORE" 
+                height={36}
+                decoding="async"
                 className="h-9 object-contain group-hover:scale-105 transition-transform duration-300" 
               />
             ) : (

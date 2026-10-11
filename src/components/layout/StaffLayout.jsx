@@ -31,7 +31,7 @@ export const StaffLayout = () => {
         <div className="p-6 flex items-center justify-between gap-4 border-b border-neutral-800">
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 rounded-xl bg-brand-white flex items-center justify-center shadow-lg shadow-primary/20 shrink-0 overflow-hidden">
-              <img src={logoImg} alt="ONE MORE Logo" className="w-full h-full object-cover" />
+              <img src={logoImg} alt="ONE MORE Logo" loading="lazy" decoding="async" width={40} height={40} className="w-full h-full object-cover" />
             </div>
             <div>
               <Link to="/" className="text-xl font-black tracking-tight block hover:text-primary transition-colors">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { deliveryAreasApi } from '../../api/deliveryAreas.api';
 import { ordersApi } from '../../api/orders.api';
@@ -20,6 +20,8 @@ const formatEgyptianPhoneNumber = (phone) => {
 export const Cart = () => {
   const { cartItems, removeFromCart, updateQuantity, cartTotal, clearCart } = useCart();
   const navigate = useNavigate();
+  const outletContext = useOutletContext();
+  const isClosed = outletContext?.settings?.restaurantOpen === false;
   
   const [areas, setAreas] = useState([]);
   const [loadingAreas, setLoadingAreas] = useState(true);
@@ -40,18 +42,22 @@ export const Cart = () => {
   });
 
   useEffect(() => {
+    let isMounted = true;
     const fetchAreas = async () => {
       try {
         const res = await deliveryAreasApi.getDeliveryAreas(1, 100);
         const data = res.data?.data?.data || res.data?.data || [];
-        setAreas(Array.isArray(data) ? data : []);
+        if (isMounted) setAreas(Array.isArray(data) ? data : []);
       } catch (err) {
-        console.error("Failed to load delivery areas", err);
+        if (isMounted) console.error("Failed to load delivery areas", err);
       } finally {
-        setLoadingAreas(false);
+        if (isMounted) setLoadingAreas(false);
       }
     };
     fetchAreas();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const selectedArea = areas.find(a => a.id.toString() === formData.deliveryAreaId);
@@ -105,7 +111,7 @@ export const Cart = () => {
 
   if (cartItems.length === 0 && !showSuccess) {
     return (
-      <div className="min-h-[60dvh] flex flex-col items-center justify-center p-4">
+      <div className={`min-h-[70dvh] flex flex-col items-center justify-center p-4 ${isClosed ? 'pt-40 sm:pt-48' : 'pt-32 sm:pt-36'}`}>
         <div className="w-24 h-24 bg-neutral-100 rounded-full flex items-center justify-center mb-6 text-neutral-300">
           <ShoppingBag size={48} />
         </div>
@@ -122,7 +128,7 @@ export const Cart = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20 animate-in fade-in duration-500">
+    <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${isClosed ? 'pt-40 sm:pt-48' : 'pt-32 sm:pt-36'} pb-16 lg:pb-24 animate-in fade-in duration-500`}>
       <h1 className="text-4xl font-black text-brand-black mb-8 tracking-tight">إتمام الطلب</h1>
       
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">

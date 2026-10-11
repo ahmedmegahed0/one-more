@@ -1,28 +1,17 @@
 import { apiClient } from './client';
-
-let categoriesCache = null;
-let categoriesPromise = null;
+import { apiCache } from './cache';
 
 export const categoriesApi = {
-  getCategories: (pageIndex = 1, pageSize = 10) => {
-    if (pageIndex === 1 && pageSize === 100) {
-      if (categoriesCache) return Promise.resolve(categoriesCache);
-      if (categoriesPromise) return categoriesPromise;
-      
-      categoriesPromise = apiClient.get('/api/Categories', {
+  getCategories: (pageIndex = 1, pageSize = 10, forceRefresh = false) => {
+    return apiCache.fetch({
+      url: '/api/Categories',
+      params: { PageIndex: pageIndex, PageSize: pageSize },
+      fetcher: () => apiClient.get('/api/Categories', {
         params: { PageIndex: pageIndex, PageSize: pageSize }
-      }).then(res => {
-        categoriesCache = res;
-        categoriesPromise = null;
-        return res;
-      }).catch(err => {
-        categoriesPromise = null;
-        throw err;
-      });
-      return categoriesPromise;
-    }
-    return apiClient.get('/api/Categories', {
-      params: { PageIndex: pageIndex, PageSize: pageSize }
+      }),
+      ttlMs: 5 * 60 * 1000, // 5 minutes cache
+      tag: 'categories',
+      forceRefresh
     });
   },
 
@@ -30,7 +19,8 @@ export const categoriesApi = {
     const res = await apiClient.post('/api/Categories', formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     });
-    categoriesCache = null;
+    apiCache.invalidateByTag('categories');
+    apiCache.invalidateByTag('products');
     return res;
   },
 
@@ -38,13 +28,15 @@ export const categoriesApi = {
     const res = await apiClient.put(`/api/Categories/${id}`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     });
-    categoriesCache = null;
+    apiCache.invalidateByTag('categories');
+    apiCache.invalidateByTag('products');
     return res;
   },
 
   deleteCategory: async (id) => {
     const res = await apiClient.delete(`/api/Categories/${id}`);
-    categoriesCache = null;
+    apiCache.invalidateByTag('categories');
+    apiCache.invalidateByTag('products');
     return res;
   }
 };

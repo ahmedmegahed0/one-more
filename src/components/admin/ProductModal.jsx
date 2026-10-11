@@ -217,6 +217,9 @@ export const ProductModal = ({ isOpen, onClose, onSuccess, initialData = null })
                 <img 
                   src={imagePreview || logoImg} 
                   alt="Preview" 
+                  decoding="async"
+                  width={256}
+                  height={256}
                   className="w-full h-full object-cover"
                   onError={(e) => { e.target.onerror = null; e.target.src = logoImg; }}
                 />

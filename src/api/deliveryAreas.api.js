@@ -1,46 +1,35 @@
 import { apiClient } from './client';
-
-let areasCache = null;
-let areasPromise = null;
+import { apiCache } from './cache';
 
 export const deliveryAreasApi = {
-  getDeliveryAreas: (pageIndex = 1, pageSize = 100) => {
-    if (pageIndex === 1 && pageSize === 100) {
-      if (areasCache) return Promise.resolve(areasCache);
-      if (areasPromise) return areasPromise;
-      
-      areasPromise = apiClient.get('/api/DeliveryAreas', {
+  getDeliveryAreas: (pageIndex = 1, pageSize = 100, forceRefresh = false) => {
+    return apiCache.fetch({
+      url: '/api/DeliveryAreas',
+      params: { PageIndex: pageIndex, PageSize: pageSize },
+      fetcher: () => apiClient.get('/api/DeliveryAreas', {
         params: { PageIndex: pageIndex, PageSize: pageSize }
-      }).then(res => {
-        areasCache = res;
-        areasPromise = null;
-        return res;
-      }).catch(err => {
-        areasPromise = null;
-        throw err;
-      });
-      return areasPromise;
-    }
-    return apiClient.get('/api/DeliveryAreas', {
-      params: { PageIndex: pageIndex, PageSize: pageSize }
+      }),
+      ttlMs: 10 * 60 * 1000, // 10 minutes cache
+      tag: 'deliveryAreas',
+      forceRefresh
     });
   },
 
   createDeliveryArea: async (data) => {
     const res = await apiClient.post('/api/DeliveryAreas', data);
-    areasCache = null;
+    apiCache.invalidateByTag('deliveryAreas');
     return res;
   },
 
   updateDeliveryArea: async (id, data) => {
     const res = await apiClient.put(`/api/DeliveryAreas/${id}`, { id, ...data });
-    areasCache = null;
+    apiCache.invalidateByTag('deliveryAreas');
     return res;
   },
 
   deleteDeliveryArea: async (id) => {
     const res = await apiClient.delete(`/api/DeliveryAreas/${id}`);
-    areasCache = null;
+    apiCache.invalidateByTag('deliveryAreas');
     return res;
   }
 };

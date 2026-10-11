@@ -3,9 +3,8 @@ import { Link, useOutletContext } from 'react-router-dom';
 import { ArrowRight, ArrowLeft, Utensils, Clock, ThumbsUp } from 'lucide-react';
 import { categoriesApi } from '../../api/categories.api';
 import { productsApi } from '../../api/products.api';
-import { CategoryCard } from '../../components/customer/CategoryCard';
 import { ProductCard } from '../../components/customer/ProductCard';
-import { SkeletonCard, SkeletonCategory } from '../../components/common/SkeletonLoader';
+import { SkeletonCard } from '../../components/common/SkeletonLoader';
 import { ProductDetailsModal } from '../../components/customer/ProductDetailsModal';
 import { useCart } from '../../context/CartContext';
 import logoImg from '../../assets/logo.jpeg';
@@ -21,29 +20,35 @@ export const Home = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchHomeData = async () => {
       try {
         const catRes = await categoriesApi.getCategories(1, 100);
         const catData = catRes.data?.data?.data || catRes.data?.data || [];
-        setCategories(Array.isArray(catData) ? catData : []);
+        if (isMounted) setCategories(Array.isArray(catData) ? catData : []);
       } catch (err) {
-        console.error("Categories fetch error", err);
+        if (isMounted) console.error("Categories fetch error", err);
       } finally {
-        setLoadingCats(false);
+        if (isMounted) setLoadingCats(false);
       }
 
       try {
         const prodRes = await productsApi.getProducts(1, 100);
         const prodData = prodRes.data?.data?.data || prodRes.data?.data || [];
-        setProducts(Array.isArray(prodData) ? prodData : []);
+        if (isMounted) setProducts(Array.isArray(prodData) ? prodData : []);
       } catch (err) {
-        console.error("Products fetch error", err);
+        if (isMounted) console.error("Products fetch error", err);
       } finally {
-        setLoadingProds(false);
+        if (isMounted) setLoadingProds(false);
       }
     };
 
     fetchHomeData();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (
@@ -55,8 +60,11 @@ export const Home = () => {
         <div className="absolute inset-0 lg:hidden z-0">
           <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/60 to-[#0a0a0a]/90 z-10"></div>
           <img 
-            src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=800&auto=format&fit=crop" 
+            src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=1000&auto=format&fit=crop" 
             alt="Mobile Background" 
+            width={800}
+            height={600}
+            decoding="async"
             className="w-full h-full object-cover opacity-40 scale-105"
           />
         </div>
@@ -108,6 +116,10 @@ export const Home = () => {
                 <img 
                   src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=1000&auto=format&fit=crop" 
                   alt="Delicious premium burger" 
+                  width={600}
+                  height={600}
+                  fetchPriority="high"
+                  decoding="async"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                 />
                 <div className="absolute bottom-8 left-8 z-20 bg-brand-black/80  border border-neutral-700 px-6 py-3 rounded-2xl shadow-xl transform group-hover:-translate-y-2 transition-transform duration-500">
@@ -158,6 +170,10 @@ export const Home = () => {
                         <img 
                           src={cat.imageUrl || cat.image || logoImg}
                           alt={cat.name}
+                          loading="lazy"
+                          decoding="async"
+                          width={300}
+                          height={300}
                           className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ${!(cat.imageUrl || cat.image) ? 'opacity-70 p-8 object-contain' : ''}`}
                           onError={(e) => { e.target.src = logoImg; e.target.className = 'w-full h-full object-contain opacity-70 p-8'; e.target.onerror = null; }}
                         />

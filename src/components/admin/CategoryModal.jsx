@@ -103,7 +103,7 @@ export const CategoryModal = ({ isOpen, onClose, onSuccess, initialData = null }
               >
                 {imagePreview ? (
                   <>
-                    <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" onError={(e) => { e.target.src = logoImg; e.target.onerror = null; }} />
+                    <img src={imagePreview} alt="Preview" decoding="async" width={400} height={176} className="w-full h-full object-cover" onError={(e) => { e.target.src = logoImg; e.target.onerror = null; }} />
                     <div className="absolute inset-0 bg-brand-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity ">
                       <span className="text-white font-bold flex items-center gap-2 bg-primary/90 px-4 py-2 rounded-full">
                         <Upload size={18} /> Change Image
@@ -112,7 +112,7 @@ export const CategoryModal = ({ isOpen, onClose, onSuccess, initialData = null }
                   </>
                 ) : (
                   <>
-                    <img src={logoImg} alt="Default" className="w-full h-full object-cover opacity-20 grayscale" />
+                    <img src={logoImg} alt="Default" decoding="async" width={400} height={176} className="w-full h-full object-cover opacity-20 grayscale" />
                     <div className="absolute inset-0 flex flex-col items-center justify-center text-brand-black group-hover:text-primary transition-colors">
                       <div className="w-14 h-14 rounded-full bg-white shadow-md flex items-center justify-center mb-3">
                         <Upload size={24} />

@@ -15,11 +15,23 @@ export const ProductCard = ({ product, onAddClick }) => {
           <img 
             src={product.image} 
             alt={product.name} 
+            loading="lazy"
+            decoding="async"
+            width={400}
+            height={300}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
             onError={(e) => { e.target.src = logoImg; e.target.onerror = null; }}
           />
         ) : (
-          <img src={logoImg} alt={product.name} className="w-full h-full object-cover opacity-80" />
+          <img 
+            src={logoImg} 
+            alt={product.name} 
+            loading="lazy"
+            decoding="async"
+            width={400}
+            height={300}
+            className="w-full h-full object-cover opacity-80" 
+          />
         )}
         {!product.isAvailable && (
           <div className="absolute inset-0 bg-brand-white/60 ] flex items-center justify-center z-10">

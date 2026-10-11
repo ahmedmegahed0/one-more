@@ -106,6 +106,10 @@ export const ProductsManagement = () => {
                           <img 
                             src={p.image || logoImg} 
                             alt={p.name} 
+                            loading="lazy"
+                            decoding="async"
+                            width={64}
+                            height={64}
                             className="w-full h-full object-cover" 
                             onError={(e) => { e.target.onerror = null; e.target.src = logoImg; }} 
                           />

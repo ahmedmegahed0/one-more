@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { categoriesApi } from '../../api/categories.api';
 import { productsApi } from '../../api/products.api';
 import { ProductCard } from '../../components/customer/ProductCard';
@@ -10,6 +11,8 @@ import logoImg from '../../assets/logo.jpeg';
 
 export const Menu = () => {
   const { addToCart } = useCart();
+  const outletContext = useOutletContext();
+  const isClosed = outletContext?.settings?.restaurantOpen === false;
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [loadingCats, setLoadingCats] = useState(true);
@@ -18,33 +21,39 @@ export const Menu = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchMenuData = async () => {
       try {
         const catRes = await categoriesApi.getCategories(1, 100);
         const catData = catRes.data?.data?.data || catRes.data?.data || [];
-        setCategories(Array.isArray(catData) ? catData : []);
+        if (isMounted) setCategories(Array.isArray(catData) ? catData : []);
       } catch (err) {
-        console.error("Categories fetch error", err);
+        if (isMounted) console.error("Categories fetch error", err);
       } finally {
-        setLoadingCats(false);
+        if (isMounted) setLoadingCats(false);
       }
 
       try {
         const prodRes = await productsApi.getProducts(1, 100);
         const prodData = prodRes.data?.data?.data || prodRes.data?.data || [];
-        setProducts(Array.isArray(prodData) ? prodData : []);
+        if (isMounted) setProducts(Array.isArray(prodData) ? prodData : []);
       } catch (err) {
-        console.error("Products fetch error", err);
+        if (isMounted) console.error("Products fetch error", err);
       } finally {
-        setLoadingProds(false);
+        if (isMounted) setLoadingProds(false);
       }
     };
 
     fetchMenuData();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (
-    <div className="flex flex-col w-full min-h-[100dvh] bg-brand-lightBg pt-8 pb-24">
+    <div className={`flex flex-col w-full min-h-[100dvh] bg-brand-lightBg ${isClosed ? 'pt-40 sm:pt-48' : 'pt-32 sm:pt-36'} pb-24`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <h1 className="text-4xl sm:text-5xl font-black text-brand-black mb-4 tracking-tight">المنيو الكامل</h1>
@@ -70,6 +79,10 @@ export const Menu = () => {
                       <img 
                         src={cat.image || logoImg}
                         alt={cat.name}
+                        loading="lazy"
+                        decoding="async"
+                        width={128}
+                        height={128}
                         className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${!cat.image ? 'opacity-80 p-2' : ''}`}
                         onError={(e) => { e.target.src = logoImg; e.target.onerror = null; }}
                       />

@@ -125,9 +125,26 @@ export const CategoriesManagement = () => {
                     <td className="py-4 px-6 text-center">
                       <div className="w-16 h-16 rounded-xl bg-white shadow-sm overflow-hidden border border-neutral-200 mx-auto">
                         {category.image ? (
-                          <img src={getImageSrc(category.image)} alt={category.name} className="w-full h-full object-cover" onError={(e) => { e.target.src = logoImg; e.target.onerror = null; }} />
+                          <img 
+                            src={getImageSrc(category.image)} 
+                            alt={category.name} 
+                            loading="lazy" 
+                            decoding="async" 
+                            width={64} 
+                            height={64} 
+                            className="w-full h-full object-cover" 
+                            onError={(e) => { e.target.src = logoImg; e.target.onerror = null; }} 
+                          />
                         ) : (
-                          <img src={logoImg} alt="Default Logo" className="w-full h-full object-cover" />
+                          <img 
+                            src={logoImg} 
+                            alt="Default Logo" 
+                            loading="lazy" 
+                            decoding="async" 
+                            width={64} 
+                            height={64} 
+                            className="w-full h-full object-cover" 
+                          />
                         )}
                       </div>
                     </td>

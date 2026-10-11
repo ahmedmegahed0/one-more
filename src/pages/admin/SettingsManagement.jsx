@@ -163,6 +163,9 @@ export const SettingsManagement = () => {
               <img 
                 src={imagePreview || logoImgFallback} 
                 alt="Restaurant Logo" 
+                decoding="async"
+                width={160}
+                height={160}
                 className="w-full h-full object-cover"
                 onError={(e) => { e.target.onerror = null; e.target.src = logoImgFallback; }}
               />

@@ -1,4 +1,5 @@
 import { apiClient } from './client';
+import { apiCache } from './cache';
 
 export const ordersApi = {
   getTodayOrders: async ({ pageIndex = 1, pageSize = 10, status = null }) => {
@@ -14,7 +15,10 @@ export const ordersApi = {
   },
 
   createOrder: async (orderPayload) => {
-    return apiClient.post('/api/Orders', orderPayload);
+    const res = await apiClient.post('/api/Orders', orderPayload);
+    apiCache.invalidateByTag('statistics');
+    apiCache.invalidateByTag('customerHistory');
+    return res;
   },
 
   moveOrderToPrepare: async (id) => {
@@ -31,23 +35,38 @@ export const ordersApi = {
   },
 
   cancelOrder: async (id, cancellationReason) => {
-    return apiClient.patch(`/api/Orders/${id}/cancel`, {
+    const res = await apiClient.patch(`/api/Orders/${id}/cancel`, {
       orderId: id,
       cancellationReason
     });
+    apiCache.invalidateByTag('statistics');
+    return res;
   },
 
   markWhatsAppSent: async (id) => {
     return apiClient.post(`/api/Orders/${id}/whatsapp-sent`);
   },
 
-  getOrderInvoice: async (id) => {
-    return apiClient.get(`/api/Orders/${id}/invoice`);
+  getOrderInvoice: (id, forceRefresh = false) => {
+    return apiCache.fetch({
+      url: `/api/Orders/${id}/invoice`,
+      fetcher: () => apiClient.get(`/api/Orders/${id}/invoice`),
+      ttlMs: 30 * 1000,
+      tag: 'invoices',
+      forceRefresh
+    });
   },
 
-  getCustomerHistory: async ({ phoneNumber, pageIndex = 1, pageSize = 10 }) => {
-    return apiClient.get('/api/Orders/customer-history', {
-      params: { PhoneNumber: phoneNumber, PageIndex: pageIndex, PageSize: pageSize }
+  getCustomerHistory: ({ phoneNumber, pageIndex = 1, pageSize = 10, forceRefresh = false }) => {
+    return apiCache.fetch({
+      url: '/api/Orders/customer-history',
+      params: { PhoneNumber: phoneNumber, PageIndex: pageIndex, PageSize: pageSize },
+      fetcher: () => apiClient.get('/api/Orders/customer-history', {
+        params: { PhoneNumber: phoneNumber, PageIndex: pageIndex, PageSize: pageSize }
+      }),
+      ttlMs: 60 * 1000, // 1 minute cache
+      tag: 'customerHistory',
+      forceRefresh
     });
   }
 };
