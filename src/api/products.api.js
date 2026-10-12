@@ -16,17 +16,13 @@ export const productsApi = {
   },
 
   createProduct: async (formData) => {
-    const res = await apiClient.post('/api/Products', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
+    const res = await apiClient.post('/api/Products', formData);
     apiCache.invalidateByTag('products');
     return res;
   },
 
   updateProduct: async (id, formData) => {
-    const res = await apiClient.put(`/api/Products/${id}`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
+    const res = await apiClient.put(`/api/Products/${id}`, formData);
     apiCache.invalidateByTag('products');
     return res;
   },

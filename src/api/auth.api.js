@@ -1,4 +1,4 @@
-import { apiClient } from './client';
+import { apiClient, refreshAccessToken } from './client';
 
 export const authApi = {
   loginAdmin: async ({ email, password }) => {
@@ -14,6 +14,10 @@ export const authApi = {
   },
   
   refreshToken: async (token) => {
+    if (token) {
+      return refreshAccessToken();
+    }
     return apiClient.post('/api/Auth/refresh-token', { refreshToken: token });
   }
 };
+

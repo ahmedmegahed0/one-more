@@ -31,6 +31,34 @@ export const AuthProvider = ({ children }) => {
     } else {
       setSession(prev => ({ ...prev, isLoading: false }));
     }
+
+    const handleSessionUpdated = (e) => {
+      if (e.detail?.accessToken) {
+        setSession(prev => ({
+          ...prev,
+          accessToken: e.detail.accessToken,
+          refreshToken: e.detail.refreshToken || prev.refreshToken,
+        }));
+      }
+    };
+
+    const handleUnauthorized = () => {
+      setSession({
+        role: null,
+        accessToken: null,
+        refreshToken: null,
+        isAuthenticated: false,
+        isLoading: false,
+      });
+    };
+
+    window.addEventListener('auth:session-updated', handleSessionUpdated);
+    window.addEventListener('auth:unauthorized', handleUnauthorized);
+
+    return () => {
+      window.removeEventListener('auth:session-updated', handleSessionUpdated);
+      window.removeEventListener('auth:unauthorized', handleUnauthorized);
+    };
   }, []);
 
   const login = useCallback(async (email, password, role) => {
@@ -65,7 +93,7 @@ export const AuthProvider = ({ children }) => {
       setSession(prev => ({ ...prev, isLoading: false }));
       return { 
         success: false, 
-        error: error.response?.data?.message || error.response?.data?.title || 'Login failed. Please check your credentials.'
+        error: error.response?.data?.message || error.message || 'Login failed. Please check your credentials.'
       };
     }
   }, []);
@@ -73,7 +101,8 @@ export const AuthProvider = ({ children }) => {
   const logout = useCallback(async () => {
     setSession(prev => ({ ...prev, isLoading: true }));
     try {
-      if (session.accessToken) {
+      const token = localStorage.getItem('accessToken') || session.accessToken;
+      if (token) {
         await authApi.logout();
       }
     } catch (e) {

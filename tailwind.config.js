@@ -31,7 +31,7 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: ['Cairo', 'Inter', 'sans-serif'],
       },
       keyframes: {
         shimmer: {

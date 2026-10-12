@@ -13,9 +13,7 @@ export const settingsApi = {
   },
 
   updateSettings: async (formData) => {
-    const res = await apiClient.put('/api/Settings', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
+    const res = await apiClient.put('/api/Settings', formData);
     apiCache.invalidateByTag('settings');
     return res;
   }

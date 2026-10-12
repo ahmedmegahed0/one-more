@@ -34,9 +34,9 @@ export const ProductCard = ({ product, onAddClick }) => {
           />
         )}
         {!product.isAvailable && (
-          <div className="absolute inset-0 bg-brand-white/60 ] flex items-center justify-center z-10">
+          <div className="absolute inset-0 bg-brand-white/70 backdrop-blur-[2px] flex items-center justify-center z-10">
             <span className="bg-brand-black text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg">
-              Sold Out
+              غير متوفر
             </span>
           </div>
         )}
@@ -45,13 +45,13 @@ export const ProductCard = ({ product, onAddClick }) => {
       <div className="p-5 flex flex-col flex-grow">
         <h3 className="font-black text-lg text-brand-black line-clamp-1 mb-1.5 leading-tight">{product.name}</h3>
         <p className="text-sm text-neutral-500 font-medium line-clamp-2 mb-5 flex-grow leading-relaxed">
-          {product.description || 'Deliciously crafted by ONE MORE.'}
+          {product.description || 'محضرة بعناية وطازجة مخصوص عشانك في ONE MORE.'}
         </p>
         
         <div className="flex items-end justify-between mt-auto">
           <div>
-            <span className="text-xs text-neutral-400 font-bold uppercase tracking-wider block mb-0.5">Starting from</span>
-            <span className="text-2xl font-black text-primary leading-none">{minPrice} <span className="text-sm font-bold">EGP</span></span>
+            <span className="text-xs text-neutral-400 font-bold block mb-0.5">يبدأ من</span>
+            <span className="text-2xl font-black text-primary leading-none">{minPrice} <span className="text-xs sm:text-sm font-bold">ج.م</span></span>
           </div>
           
           <button 

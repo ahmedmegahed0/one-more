@@ -16,18 +16,14 @@ export const categoriesApi = {
   },
 
   createCategory: async (formData) => {
-    const res = await apiClient.post('/api/Categories', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
+    const res = await apiClient.post('/api/Categories', formData);
     apiCache.invalidateByTag('categories');
     apiCache.invalidateByTag('products');
     return res;
   },
 
   updateCategory: async (id, formData) => {
-    const res = await apiClient.put(`/api/Categories/${id}`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
+    const res = await apiClient.put(`/api/Categories/${id}`, formData);
     apiCache.invalidateByTag('categories');
     apiCache.invalidateByTag('products');
     return res;
